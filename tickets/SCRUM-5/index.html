@@ -18,69 +18,75 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
-        .container h2 {
+        .container h1 {
             text-align: center;
             margin-bottom: 20px;
-            color: #66d9ef;
+            color: #4CAF50;
         }
-        .form-group {
-            margin-bottom: 20px;
+        .container form {
+            margin-top: 20px;
         }
-        .form-group label {
+        .container label {
             display: block;
             margin-bottom: 10px;
-            color: #ccc;
         }
-        .form-group input {
+        .container input[type="email"], .container input[type="password"] {
             width: 100%;
             height: 40px;
+            margin-bottom: 20px;
             padding: 10px;
             border: none;
             border-radius: 5px;
             background-color: #3f3f4f;
             color: #fff;
         }
-        .form-group input:focus {
-            background-color: #4f4f5f;
-        }
-        .btn {
+        .container input[type="submit"] {
             width: 100%;
             height: 40px;
+            background-color: #4CAF50;
+            color: #fff;
             padding: 10px;
             border: none;
             border-radius: 5px;
-            background-color: #66d9ef;
-            color: #fff;
             cursor: pointer;
         }
-        .btn:hover {
-            background-color: #58c9e5;
+        .container input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+        .erreur {
+            color: #f44336;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Connexion</h2>
-        <form id="login-form">
-            <div class="form-group">
-                <label for="email">Adresse e-mail</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn">Se connecter</button>
+        <h1>Connexion</h1>
+        <form id="form-connexion">
+            <label for="email">Adresse e-mail</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required>
+            <div class="erreur" id="erreur"></div>
+            <input type="submit" value="Se connecter">
         </form>
     </div>
     <script>
-        const form = document.getElementById('login-form');
+        const form = document.getElementById('form-connexion');
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            console.log(`Email : ${email}, Mot de passe : ${password}`);
-            // Ajouter votre logique de connexion ici
+            const erreur = document.getElementById('erreur');
+            if (email === '' || password === '') {
+                erreur.textContent = 'Veuillez remplir tous les champs';
+            } else {
+                // Ici vous pouvez ajouter votre logique de connexion
+                // Pour cet exemple, nous allons simplement afficher un message de connexion réussie
+                erreur.textContent = '';
+                alert('Connexion réussie !');
+            }
         });
     </script>
 </html>
