@@ -23,24 +23,26 @@
             height: 40px;
             margin-bottom: 20px;
             padding: 10px;
-            font-size: 24px;
-            text-align: right;
             background-color: #3f3f4f;
             border: none;
             border-radius: 10px;
+            font-size: 24px;
+            text-align: right;
             color: #fff;
         }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+        }
         .button {
-            width: 60px;
-            height: 60px;
-            margin: 5px;
             padding: 10px;
-            font-size: 18px;
             background-color: #4f4f5f;
             border: none;
             border-radius: 10px;
-            color: #fff;
+            font-size: 18px;
             cursor: pointer;
+            color: #fff;
         }
         .button:hover {
             background-color: #5f5f6f;
@@ -53,87 +55,58 @@
 <body>
     <div class="calculator">
         <input type="text" id="display" class="display" disabled>
-        <div>
+        <div class="buttons">
             <button class="button" onclick="clearDisplay()">C</button>
-            <button class="button" onclick="backspace()">DEL</button>
-        </div>
-        <div>
-            <button class="button" onclick="appendNumber(7)">7</button>
-            <button class="button" onclick="appendNumber(8)">8</button>
-            <button class="button" onclick="appendNumber(9)">9</button>
-            <button class="button" onclick="appendOperator('/')">/</button>
-        </div>
-        <div>
-            <button class="button" onclick="appendNumber(4)">4</button>
-            <button class="button" onclick="appendNumber(5)">5</button>
-            <button class="button" onclick="appendNumber(6)">6</button>
-            <button class="button" onclick="appendOperator('*')">*</button>
-        </div>
-        <div>
-            <button class="button" onclick="appendNumber(1)">1</button>
-            <button class="button" onclick="appendNumber(2)">2</button>
-            <button class="button" onclick="appendNumber(3)">3</button>
-            <button class="button" onclick="appendOperator('-')">-</button>
-        </div>
-        <div>
-            <button class="button" onclick="appendNumber(0)">0</button>
-            <button class="button" onclick="appendNumber('.')">.</button>
-            <button class="button" onclick="calculate()">=</button>
-            <button class="button" onclick="appendOperator('+')">+</button>
+            <button class="button" onclick="deleteLastChar()">DEL</button>
+            <button class="button" onclick="calculate('%')">%</button>
+            <button class="button" onclick="calculate('/')">/</button>
+            <button class="button" onclick="calculate('7')">7</button>
+            <button class="button" onclick="calculate('8')">8</button>
+            <button class="button" onclick="calculate('9')">9</button>
+            <button class="button" onclick="calculate('*')">*</button>
+            <button class="button" onclick="calculate('4')">4</button>
+            <button class="button" onclick="calculate('5')">5</button>
+            <button class="button" onclick="calculate('6')">6</button>
+            <button class="button" onclick="calculate('-')">-</button>
+            <button class="button" onclick="calculate('1')">1</button>
+            <button class="button" onclick="calculate('2')">2</button>
+            <button class="button" onclick="calculate('3')">3</button>
+            <button class="button" onclick="calculate('+')">+</button>
+            <button class="button" onclick="calculate('0')">0</button>
+            <button class="button" onclick="calculate('.')">.</button>
+            <button class="button" onclick="calculate('=')">=</button>
         </div>
     </div>
     <script>
         let display = document.getElementById('display');
-        let currentNumber = '';
-        let previousNumber = '';
-        let operator = '';
-
+        let calculation = '';
+        function calculate(char) {
+            if (char === '=') {
+                try {
+                    display.value = eval(calculation);
+                    calculation = display.value;
+                } catch (e) {
+                    display.value = 'Erreur';
+                    calculation = '';
+                }
+            } else if (char === 'C') {
+                display.value = '';
+                calculation = '';
+            } else if (char === 'DEL') {
+                calculation = calculation.slice(0, -1);
+                display.value = calculation;
+            } else {
+                calculation += char;
+                display.value = calculation;
+            }
+        }
         function clearDisplay() {
             display.value = '';
-            currentNumber = '';
-            previousNumber = '';
-            operator = '';
+            calculation = '';
         }
-
-        function backspace() {
-            currentNumber = currentNumber.slice(0, -1);
-            display.value = currentNumber;
-        }
-
-        function appendNumber(number) {
-            currentNumber += number;
-            display.value = currentNumber;
-        }
-
-        function appendOperator(op) {
-            previousNumber = currentNumber;
-            operator = op;
-            currentNumber = '';
-            display.value = previousNumber + ' ' + operator;
-        }
-
-        function calculate() {
-            let result;
-            switch (operator) {
-                case '+':
-                    result = parseFloat(previousNumber) + parseFloat(currentNumber);
-                    break;
-                case '-':
-                    result = parseFloat(previousNumber) - parseFloat(currentNumber);
-                    break;
-                case '*':
-                    result = parseFloat(previousNumber) * parseFloat(currentNumber);
-                    break;
-                case '/':
-                    result = parseFloat(previousNumber) / parseFloat(currentNumber);
-                    break;
-                default:
-                    result = 0;
-            }
-            display.value = result;
-            currentNumber = result.toString();
-            previousNumber = '';
-            operator = '';
+        function deleteLastChar() {
+            calculation = calculation.slice(0, -1);
+            display.value = calculation;
         }
     </script>
 </html>
