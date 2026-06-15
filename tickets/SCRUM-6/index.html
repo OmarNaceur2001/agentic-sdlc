@@ -23,11 +23,11 @@
             height: 40px;
             margin-bottom: 20px;
             padding: 10px;
-            background-color: #3f3f5f;
-            border: none;
-            border-radius: 10px;
             font-size: 24px;
             text-align: right;
+            background-color: #3f3f4f;
+            border: none;
+            border-radius: 10px;
             color: #fff;
         }
         .button {
@@ -35,18 +35,18 @@
             height: 60px;
             margin: 5px;
             padding: 10px;
-            background-color: #4f4f6f;
+            font-size: 18px;
+            background-color: #4f4f5f;
             border: none;
             border-radius: 10px;
-            font-size: 24px;
-            cursor: pointer;
             color: #fff;
+            cursor: pointer;
         }
         .button:hover {
-            background-color: #6f6f8f;
+            background-color: #5f5f6f;
         }
         .button:active {
-            background-color: #8f8f9f;
+            background-color: #6f6f7f;
         }
     </style>
 </head>
@@ -88,15 +88,28 @@
         let previousNumber = '';
         let operator = '';
 
+        function clearDisplay() {
+            display.value = '';
+            currentNumber = '';
+            previousNumber = '';
+            operator = '';
+        }
+
+        function backspace() {
+            currentNumber = currentNumber.slice(0, -1);
+            display.value = currentNumber;
+        }
+
         function appendNumber(number) {
-            currentNumber += number.toString();
+            currentNumber += number;
             display.value = currentNumber;
         }
 
         function appendOperator(op) {
             previousNumber = currentNumber;
-            currentNumber = '';
             operator = op;
+            currentNumber = '';
+            display.value = previousNumber + ' ' + operator;
         }
 
         function calculate() {
@@ -117,22 +130,10 @@
                 default:
                     result = 0;
             }
-            display.value = result.toString();
+            display.value = result;
             currentNumber = result.toString();
             previousNumber = '';
             operator = '';
-        }
-
-        function clearDisplay() {
-            display.value = '';
-            currentNumber = '';
-            previousNumber = '';
-            operator = '';
-        }
-
-        function backspace() {
-            currentNumber = currentNumber.slice(0, -1);
-            display.value = currentNumber;
         }
     </script>
 </html>
