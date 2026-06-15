@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculatrice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+        }
+        .calculator input {
+            grid-column: 1 / 5;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .calculator button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .calculator button:hover {
+            background-color: #f0f0f0;
+        }
+        .calculator button:active {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="calculator">
+            <input type="text" id="result" disabled>
+            <button id="clear">C</button>
+            <button id="backspace">&lt;</button>
+            <button id="divide">/</button>
+            <button id="seven">7</button>
+            <button id="eight">8</button>
+            <button id="nine">9</button>
+            <button id="multiply">*</button>
+            <button id="four">4</button>
+            <button id="five">5</button>
+            <button id="six">6</button>
+            <button id="subtract">-</button>
+            <button id="one">1</button>
+            <button id="two">2</button>
+            <button id="three">3</button>
+            <button id="add">+</button>
+            <button id="zero">0</button>
+            <button id="dot">.</button>
+            <button id="equals">=</button>
+        </div>
+    </div>
+    <script>
+        const result = document.getElementById('result');
+        const clear = document.getElementById('clear');
+        const backspace = document.getElementById('backspace');
+        const divide = document.getElementById('divide');
+        const multiply = document.getElementById('multiply');
+        const subtract = document.getElementById('subtract');
+        const add = document.getElementById('add');
+        const equals = document.getElementById('equals');
+        const numbers = document.querySelectorAll('.calculator button:not(#clear):not(#backspace):not(#divide):not(#multiply):not(#subtract):not(#add):not(#equals)');
+        let currentNumber = '';
+        let previousNumber = '';
+        let operation = '';
+
+        clear.addEventListener('click', () => {
+            currentNumber = '';
+            previousNumber = '';
+            operation = '';
+            result.value = '';
+        });
+
+        backspace.addEventListener('click', () => {
+            currentNumber = currentNumber.slice(0, -1);
+            result.value = currentNumber;
+        });
+
+        numbers.forEach(button => {
+            button.addEventListener('click', () => {
+                currentNumber += button.textContent;
+                result.value = currentNumber;
+            });
+        });
+
+        divide.addEventListener('click', () => {
+            previousNumber = currentNumber;
+            currentNumber = '';
+            operation = 'divide';
+            result.value = '/';
+        });
+
+        multiply.addEventListener('click', () => {
+            previousNumber = currentNumber;
+            currentNumber = '';
+            operation = 'multiply';
+            result.value = '*';
+        });
+
+        subtract.addEventListener('click', () => {
+            previousNumber = currentNumber;
+            currentNumber = '';
+            operation = 'subtract';
+            result.value = '-';
+        });
+
+        add.addEventListener('click', () => {
+            previousNumber = currentNumber;
+            currentNumber = '';
+            operation = 'add';
+            result.value = '+';
+        });
+
+        equals.addEventListener('click', () => {
+            let resultValue;
+            switch (operation) {
+                case 'divide':
+                    resultValue = parseFloat(previousNumber) / parseFloat(currentNumber);
+                    break;
+                case 'multiply':
+                    resultValue = parseFloat(previousNumber) * parseFloat(currentNumber);
+                    break;
+                case 'subtract':
+                    resultValue = parseFloat(previousNumber) - parseFloat(currentNumber);
+                    break;
+                case 'add':
+                    resultValue = parseFloat(previousNumber) + parseFloat(currentNumber);
+                    break;
+                default:
+                    resultValue = 0;
+            }
+            result.value = resultValue;
+            currentNumber = resultValue.toString();
+            previousNumber = '';
+            operation = '';
+        });
+    </script>
+</body>
+</html>
