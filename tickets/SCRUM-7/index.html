@@ -6,27 +6,27 @@
     <title>Create a contact form</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             background-color: #1a1a2e;
-            color: #fff;
+            font-family: Arial, sans-serif;
         }
         .container {
-            max-width: 400px;
+            width: 50%;
             margin: 40px auto;
-            padding: 20px;
             background-color: #2f2f3f;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
         .container h2 {
+            color: #fff;
             text-align: center;
-            margin-bottom: 20px;
         }
         .form-group {
             margin-bottom: 20px;
         }
         .form-group label {
             display: block;
+            color: #fff;
             margin-bottom: 10px;
         }
         .form-group input, .form-group textarea {
@@ -34,11 +34,11 @@
             padding: 10px;
             border: none;
             border-radius: 5px;
-            background-color: #4f4f5f;
+            background-color: #3f3f4f;
             color: #fff;
         }
         .form-group input:focus, .form-group textarea:focus {
-            background-color: #6f6f7f;
+            background-color: #4f4f5f;
         }
         .btn {
             background-color: #ff69b4;
@@ -71,7 +71,7 @@
             </div>
             <button class="btn" type="submit">Envoyer</button>
         </form>
-        <div id="response" style="margin-top: 20px;"></div>
+        <div id="message-envoye" style="display: none; color: #fff; text-align: center; margin-top: 20px;"></div>
     </div>
     <script>
         const form = document.getElementById('contact-form');
@@ -80,9 +80,13 @@
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const message = document.getElementById('message').value;
-            const response = document.getElementById('response');
-            response.innerHTML = `Merci ${name} pour votre message !`;
+            const messageEnvoye = document.getElementById('message-envoye');
+            messageEnvoye.style.display = 'block';
+            messageEnvoye.innerText = 'Message envoyé avec succès !';
             form.reset();
+            setTimeout(() => {
+                messageEnvoye.style.display = 'none';
+            }, 3000);
         });
     </script>
 </html>
