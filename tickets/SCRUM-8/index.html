@@ -1,177 +1,116 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord d'analyse</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1a1a2e;
-            color: #fff;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #2f2f3f;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            font-size: 24px;
-            font-weight: bold;
-            color: #66d9ef;
-        }
-        .charts {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        .chart {
-            width: 45%;
-            margin: 20px;
-            padding: 20px;
-            background-color: #3f3f4f;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        .chart h2 {
-            font-size: 18px;
-            font-weight: bold;
-            color: #66d9ef;
-            margin-bottom: 10px;
-        }
-        .chart canvas {
-            width: 100%;
-            height: 200px;
-        }
-        .stats {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .stat {
-            width: 45%;
-            margin: 20px;
-            padding: 20px;
-            background-color: #3f3f4f;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        .stat h2 {
-            font-size: 18px;
-            font-weight: bold;
-            color: #66d9ef;
-            margin-bottom: 10px;
-        }
-        .stat p {
-            font-size: 16px;
-            color: #fff;
-        }
-    </style>
+  <title>Tableau de bord d'analyse</title>
+  <style>
+    body {
+      background-color: #1a1a2e;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #2f2f3f;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .card {
+      background-color: #3f3f4f;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .card h2 {
+      margin-top: 0;
+    }
+    .chart {
+      width: 100%;
+      height: 200px;
+      background-color: #4f4f5f;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .chart svg {
+      width: 100%;
+      height: 100%;
+    }
+    button {
+      background-color: #6f6f7f;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #7f7f8f;
+    }
+    form {
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input[type="text"] {
+      width: 100%;
+      height: 40px;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background-color: #4f4f5f;
+    }
+    input[type="submit"] {
+      background-color: #6f6f7f;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #7f7f8f;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Tableau de bord d'analyse</h1>
-        </div>
-        <div class="charts">
-            <div class="chart">
-                <h2>Graphique 1</h2>
-                <canvas id="chart1"></canvas>
-            </div>
-            <div class="chart">
-                <h2>Graphique 2</h2>
-                <canvas id="chart2"></canvas>
-            </div>
-        </div>
-        <div class="stats">
-            <div class="stat">
-                <h2>Statistique 1</h2>
-                <p>Nombre de visites : 1000</p>
-            </div>
-            <div class="stat">
-                <h2>Statistique 2</h2>
-                <p>Nombre de pages vues : 5000</p>
-            </div>
-        </div>
+  <div class="container">
+    <h1>Tableau de bord d'analyse</h1>
+    <div class="card">
+      <h2>Statistiques</h2>
+      <p>Nombre de visites : 1000</p>
+      <p>Nombre de pages vues : 5000</p>
     </div>
-    <script>
-        const chart1 = document.getElementById('chart1').getContext('2d');
-        const chart2 = document.getElementById('chart2').getContext('2d');
-        new Chart(chart1, {
-            type: 'bar',
-            data: {
-                labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai'],
-                datasets: [{
-                    label: 'Nombre de visites',
-                    data: [100, 200, 300, 400, 500],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-        new Chart(chart2, {
-            type: 'line',
-            data: {
-                labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai'],
-                datasets: [{
-                    label: 'Nombre de pages vues',
-                    data: [1000, 2000, 3000, 4000, 5000],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</body>
+    <div class="card">
+      <h2>Graphique</h2>
+      <div class="chart">
+        <svg>
+          <circle cx="50" cy="50" r="40" fill="#6f6f7f" />
+          <circle cx="150" cy="50" r="30" fill="#7f7f8f" />
+          <circle cx="250" cy="50" r="20" fill="#8f8f9f" />
+        </svg>
+      </div>
+    </div>
+    <form>
+      <label for="name">Nom :</label>
+      <input type="text" id="name" name="name" required>
+      <label for="email">Email :</label>
+      <input type="text" id="email" name="email" required>
+      <input type="submit" value="Envoyer">
+    </form>
+  </div>
+  <script>
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.querySelector('#name').value;
+      const email = document.querySelector('#email').value;
+      if (name === '' || email === '') {
+        alert('Veuillez remplir tous les champs');
+      } else {
+        alert('Formulaire envoyé avec succès');
+      }
+    });
+  </script>
 </html>
