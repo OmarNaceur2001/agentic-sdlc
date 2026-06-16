@@ -11,6 +11,10 @@ orchestrator.log
 .DS_Store
 Thumbs.db
 
+# Testing Agent
+screenshots/
+temp_*.html
+
 # Fichiers IDE
 .vscode/
 .idea/
