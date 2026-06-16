@@ -1,47 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Analytics Dashboard</title>
+  <title>Tableau de bord d'analyse</title>
   <style>
     body {
       font-family: Arial, sans-serif;
     }
-    .dashboard {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
+    .container {
+      width: 80%;
+      margin: 40px auto;
     }
     .chart {
-      width: 500px;
-      height: 300px;
+      width: 100%;
+      height: 200px;
       border: 1px solid #ccc;
-      margin: 20px;
     }
     .chart svg {
       width: 100%;
       height: 100%;
     }
     .statistics {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      margin-top: 20px;
     }
-    .statistic {
-      margin: 20px;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      width: 200px;
-      text-align: center;
+    .statistics ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .statistics li {
+      margin-bottom: 10px;
     }
     button {
-      margin: 20px;
+      background-color: #4CAF50;
+      color: #fff;
       padding: 10px 20px;
       border: none;
       border-radius: 5px;
-      background-color: #4CAF50;
-      color: #fff;
       cursor: pointer;
     }
     button:hover {
@@ -50,42 +44,40 @@
   </style>
 </head>
 <body>
-  <div class="dashboard">
-    <h1>Analytics Dashboard</h1>
+  <div class="container">
+    <h1>Tableau de bord d'analyse</h1>
     <div class="chart">
       <svg>
-        <circle cx="250" cy="150" r="100" fill="#4CAF50" />
-        <circle cx="250" cy="150" r="50" fill="#fff" />
-        <text x="250" y="160" text-anchor="middle" font-size="24">50%</text>
+        <rect x="10" y="10" width="100" height="50" fill="#ccc" />
+        <rect x="120" y="10" width="100" height="100" fill="#ccc" />
+        <rect x="230" y="10" width="100" height="150" fill="#ccc" />
       </svg>
     </div>
     <div class="statistics">
-      <div class="statistic">
-        <h2>Visitors</h2>
-        <p>1000</p>
-      </div>
-      <div class="statistic">
-        <h2>Page Views</h2>
-        <p>5000</p>
-      </div>
-      <div class="statistic">
-        <h2>Bounce Rate</h2>
-        <p>20%</p>
-      </div>
+      <h2>Statistiques</h2>
+      <ul>
+        <li>Nombre de visites : 1000</li>
+        <li>Nombre de pages vues : 5000</li>
+        <li>Temps de chargement moyen : 2s</li>
+      </ul>
     </div>
-    <button>Update Statistics</button>
-    <button>View More Details</button>
+    <button id="update-button">Mettre à jour les statistiques</button>
+    <button id="reset-button">Réinitialiser les statistiques</button>
   </div>
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const updateButton = document.querySelector("button:nth-child(1)");
-      const viewMoreButton = document.querySelector("button:nth-child(2)");
-      updateButton.addEventListener("click", function() {
-        alert("Statistics updated!");
-      });
-      viewMoreButton.addEventListener("click", function() {
-        alert("More details...");
-      });
+    document.getElementById("update-button").addEventListener("click", function() {
+      document.querySelector(".statistics ul").innerHTML = `
+        <li>Nombre de visites : 1200</li>
+        <li>Nombre de pages vues : 6000</li>
+        <li>Temps de chargement moyen : 1.5s</li>
+      `;
+    });
+    document.getElementById("reset-button").addEventListener("click", function() {
+      document.querySelector(".statistics ul").innerHTML = `
+        <li>Nombre de visites : 1000</li>
+        <li>Nombre de pages vues : 5000</li>
+        <li>Temps de chargement moyen : 2s</li>
+      `;
     });
   </script>
 </html>
