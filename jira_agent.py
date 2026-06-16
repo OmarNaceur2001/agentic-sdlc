@@ -202,7 +202,6 @@ def obtenir_transitions(ticket_id: str) -> list:
         print(f"   Détail : {erreur}")
         return []
 
-
 def trouver_transition_vers_statut(
     transitions: list[dict],
     statut_cible: str

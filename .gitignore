@@ -6,7 +6,7 @@ venv/
 __pycache__/
 *.pyc
 *.pyo
-
+orchestrator.log
 # Fichiers système
 .DS_Store
 Thumbs.db

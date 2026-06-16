@@ -15,6 +15,7 @@ import requests
 from dotenv import load_dotenv
 from groq import Groq
 
+
 load_dotenv()
 
 # ── Configuration ─────────────────────────────────────
@@ -192,6 +193,7 @@ def uploader_sur_github(ticket_id: str, titre: str, code_html: str) -> str | Non
     Upload un fichier HTML sur GitHub via l'API.
     Retourne l'URL du fichier si succès, None sinon.
     """
+    
     # nom du fichier basé sur l'ID du ticket
     nom_fichier = f"tickets/{ticket_id}/index.html"
 
