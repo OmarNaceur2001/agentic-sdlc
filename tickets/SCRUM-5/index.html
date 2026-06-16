@@ -43,18 +43,29 @@
   <div class="login-form">
     <h2>Login</h2>
     <form>
-      <input type="email" placeholder="Email" id="email" required>
-      <input type="password" placeholder="Password" id="password" required>
-      <button type="submit">Login</button>
+      <input type="email" placeholder="Email" id="email" />
+      <input type="password" placeholder="Password" id="password" />
+      <button id="login-btn">Login</button>
     </form>
+    <p id="error-msg"></p>
   </div>
   <script>
-    const form = document.querySelector('form');
-    form.addEventListener('submit', (e) => {
+    const loginBtn = document.getElementById('login-btn');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const errorMsg = document.getElementById('error-msg');
+    
+    loginBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      console.log(`Email: ${email}, Password: ${password}`);
+      const email = emailInput.value;
+      const password = passwordInput.value;
+      
+      if (email === '' || password === '') {
+        errorMsg.textContent = 'Please fill in all fields';
+      } else {
+        // Simuler une connexion réussie
+        errorMsg.textContent = 'Login successful';
+      }
     });
   </script>
 </html>
