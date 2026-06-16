@@ -43,15 +43,29 @@
   <div class="login-form">
     <h2>Login</h2>
     <form>
-      <input type="email" placeholder="Email" id="email">
-      <input type="password" placeholder="Password" id="password">
-      <button type="submit">Login</button>
+      <input type="email" placeholder="Email" id="email" />
+      <input type="password" placeholder="Password" id="password" />
+      <button id="login-btn">Login</button>
     </form>
-    <button type="button" onclick="register()">Register</button>
+    <p id="error-msg"></p>
   </div>
   <script>
-    function register() {
-      alert("Registration is not available yet.");
-    }
+    const loginBtn = document.getElementById('login-btn');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const errorMsg = document.getElementById('error-msg');
+    
+    loginBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = emailInput.value;
+      const password = passwordInput.value;
+      
+      if (email === '' || password === '') {
+        errorMsg.textContent = 'Please fill in all fields';
+      } else {
+        // Simuler une connexion réussie
+        errorMsg.textContent = 'Login successful';
+      }
+    });
   </script>
 </html>
