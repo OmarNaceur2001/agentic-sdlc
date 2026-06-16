@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profil</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .profil {
+      width: 300px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 20px auto;
+    }
+    .edit-button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .edit-button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <div class="profil">
+    <img class="avatar" src="https://via.placeholder.com/100" alt="Avatar">
+    <h2>John Doe</h2>
+    <p>Email : johndoe@example.com</p>
+    <p>Bio : Développeur web passionné</p>
+    <button class="edit-button" onclick="editProfil()">Éditer</button>
+  </div>
+  <script>
+    function editProfil() {
+      alert("Édition du profil...");
+    }
+  </script>
+</html>
