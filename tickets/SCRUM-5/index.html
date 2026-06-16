@@ -22,7 +22,6 @@
       margin-bottom: 20px;
       padding: 10px;
       border: 1px solid #ccc;
-      border-radius: 5px;
     }
     .login-form button {
       width: 100%;
@@ -43,30 +42,19 @@
   <div class="login-form">
     <h2>Login</h2>
     <form>
-      <input type="email" placeholder="Email" id="email" />
-      <input type="password" placeholder="Password" id="password" />
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
       <button id="login-btn">Login</button>
     </form>
-    <p id="error-msg"></p>
+    <p>Don't have an account? <a href="#">Sign up</a></p>
   </div>
   <script>
     const loginBtn = document.getElementById('login-btn');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const errorMsg = document.getElementById('error-msg');
-    
     loginBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      const email = emailInput.value;
-      const password = passwordInput.value;
-      
-      if (email === '' || password === '') {
-        errorMsg.textContent = 'Please fill in all fields';
-      } else {
-        errorMsg.textContent = '';
-        // Simuler un login réussi
-        alert('Login successful');
-      }
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      console.log(`Email: ${email}, Password: ${password}`);
     });
   </script>
 </html>
