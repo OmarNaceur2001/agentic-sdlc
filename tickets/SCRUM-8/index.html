@@ -39,7 +39,7 @@
       margin: 20px;
       padding: 10px 20px;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
       background-color: #4CAF50;
       color: #fff;
       cursor: pointer;
@@ -56,35 +56,38 @@
       <svg>
         <circle cx="250" cy="150" r="100" fill="#4CAF50" />
         <circle cx="250" cy="150" r="50" fill="#fff" />
-        <text x="250" y="160" text-anchor="middle" font-size="24">50%</text>
+        <text x="250" y="160" font-size="24" text-anchor="middle">50%</text>
       </svg>
     </div>
     <div class="statistics">
       <div class="statistic">
-        <h2>Users</h2>
+        <h2>Visitors</h2>
         <p>1000</p>
       </div>
       <div class="statistic">
-        <h2>Views</h2>
+        <h2>Page Views</h2>
         <p>5000</p>
       </div>
       <div class="statistic">
-        <h2>Clicks</h2>
-        <p>2000</p>
+        <h2>Bounce Rate</h2>
+        <p>20%</p>
       </div>
     </div>
-    <button>Refresh</button>
-    <button>Export</button>
+    <button id="update-button">Update Statistics</button>
   </div>
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const refreshButton = document.querySelector("button:first-child");
-      const exportButton = document.querySelector("button:last-child");
-      refreshButton.addEventListener("click", function() {
-        alert("Data refreshed!");
-      });
-      exportButton.addEventListener("click", function() {
-        alert("Data exported!");
+    document.getElementById('update-button').addEventListener('click', function() {
+      var visitors = Math.floor(Math.random() * 1000);
+      var pageViews = Math.floor(Math.random() * 5000);
+      var bounceRate = Math.floor(Math.random() * 100);
+      document.querySelectorAll('.statistic p').forEach(function(p, index) {
+        if (index === 0) {
+          p.textContent = visitors;
+        } else if (index === 1) {
+          p.textContent = pageViews;
+        } else {
+          p.textContent = bounceRate + '%';
+        }
       });
     });
   </script>
