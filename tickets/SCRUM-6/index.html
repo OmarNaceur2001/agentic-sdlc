@@ -59,32 +59,42 @@
     add.addEventListener('click', () => {
       const n1 = parseFloat(num1.value);
       const n2 = parseFloat(num2.value);
-      const res = n1 + n2;
-      resultat.textContent = `Résultat : ${res}`;
+      if (!isNaN(n1) && !isNaN(n2)) {
+        resultat.textContent = `Résultat : ${n1 + n2}`;
+      } else {
+        resultat.textContent = 'Veuillez entrer des nombres valides';
+      }
     });
 
     subtract.addEventListener('click', () => {
       const n1 = parseFloat(num1.value);
       const n2 = parseFloat(num2.value);
-      const res = n1 - n2;
-      resultat.textContent = `Résultat : ${res}`;
+      if (!isNaN(n1) && !isNaN(n2)) {
+        resultat.textContent = `Résultat : ${n1 - n2}`;
+      } else {
+        resultat.textContent = 'Veuillez entrer des nombres valides';
+      }
     });
 
     multiply.addEventListener('click', () => {
       const n1 = parseFloat(num1.value);
       const n2 = parseFloat(num2.value);
-      const res = n1 * n2;
-      resultat.textContent = `Résultat : ${res}`;
+      if (!isNaN(n1) && !isNaN(n2)) {
+        resultat.textContent = `Résultat : ${n1 * n2}`;
+      } else {
+        resultat.textContent = 'Veuillez entrer des nombres valides';
+      }
     });
 
     divide.addEventListener('click', () => {
       const n1 = parseFloat(num1.value);
       const n2 = parseFloat(num2.value);
-      if (n2 !== 0) {
-        const res = n1 / n2;
-        resultat.textContent = `Résultat : ${res}`;
+      if (!isNaN(n1) && !isNaN(n2) && n2 !== 0) {
+        resultat.textContent = `Résultat : ${n1 / n2}`;
+      } else if (n2 === 0) {
+        resultat.textContent = 'Erreur : division par zéro';
       } else {
-        resultat.textContent = 'Erreur : Division par zéro';
+        resultat.textContent = 'Veuillez entrer des nombres valides';
       }
     });
   </script>
