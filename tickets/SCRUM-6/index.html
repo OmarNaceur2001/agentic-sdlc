@@ -1,112 +1,108 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a calculator page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1a1a2e;
-            color: #fff;
-        }
-        .calculator {
-            width: 300px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #2f2f3f;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        .display {
-            width: 100%;
-            height: 40px;
-            margin-bottom: 20px;
-            padding: 10px;
-            background-color: #3f3f4f;
-            border: none;
-            border-radius: 10px;
-            font-size: 24px;
-            text-align: right;
-            color: #fff;
-        }
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 10px;
-        }
-        .button {
-            padding: 10px;
-            background-color: #4f4f5f;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            cursor: pointer;
-            color: #fff;
-        }
-        .button:hover {
-            background-color: #5f5f6f;
-        }
-        .button:active {
-            background-color: #6f6f7f;
-        }
-    </style>
+  <title>Calculatrice</title>
+  <style>
+    body {
+      background-color: #1a1a2e;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      width: 300px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #2e2e3e;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .input-field {
+      width: 100%;
+      height: 40px;
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      background-color: #3e3e4e;
+      color: #fff;
+    }
+    .button {
+      width: 100%;
+      height: 40px;
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4e4e5e;
+      color: #fff;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #5e5e6e;
+    }
+    .result {
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-    <div class="calculator">
-        <input type="text" id="display" class="display" disabled>
-        <div class="buttons">
-            <button class="button" onclick="clearDisplay()">C</button>
-            <button class="button" onclick="deleteLastChar()">DEL</button>
-            <button class="button" onclick="calculate('%')">%</button>
-            <button class="button" onclick="calculate('/')">/</button>
-            <button class="button" onclick="calculate('7')">7</button>
-            <button class="button" onclick="calculate('8')">8</button>
-            <button class="button" onclick="calculate('9')">9</button>
-            <button class="button" onclick="calculate('*')">*</button>
-            <button class="button" onclick="calculate('4')">4</button>
-            <button class="button" onclick="calculate('5')">5</button>
-            <button class="button" onclick="calculate('6')">6</button>
-            <button class="button" onclick="calculate('-')">-</button>
-            <button class="button" onclick="calculate('1')">1</button>
-            <button class="button" onclick="calculate('2')">2</button>
-            <button class="button" onclick="calculate('3')">3</button>
-            <button class="button" onclick="calculate('+')">+</button>
-            <button class="button" onclick="calculate('0')">0</button>
-            <button class="button" onclick="calculate('.')">.</button>
-            <button class="button" onclick="calculate('=')">=</button>
-        </div>
-    </div>
-    <script>
-        let display = document.getElementById('display');
-        let calculation = '';
-        function calculate(char) {
-            if (char === '=') {
-                try {
-                    display.value = eval(calculation);
-                    calculation = display.value;
-                } catch (e) {
-                    display.value = 'Erreur';
-                    calculation = '';
-                }
-            } else if (char === 'C') {
-                display.value = '';
-                calculation = '';
-            } else if (char === 'DEL') {
-                calculation = calculation.slice(0, -1);
-                display.value = calculation;
-            } else {
-                calculation += char;
-                display.value = calculation;
-            }
-        }
-        function clearDisplay() {
-            display.value = '';
-            calculation = '';
-        }
-        function deleteLastChar() {
-            calculation = calculation.slice(0, -1);
-            display.value = calculation;
-        }
-    </script>
+  <div class="container">
+    <h2>Calculatrice</h2>
+    <input type="number" id="num1" class="input-field" placeholder="Nombre 1">
+    <input type="number" id="num2" class="input-field" placeholder="Nombre 2">
+    <select id="operation" class="input-field">
+      <option value="add">Addition</option>
+      <option value="subtract">Soustraction</option>
+      <option value="multiply">Multiplication</option>
+      <option value="divide">Division</option>
+    </select>
+    <button class="button" id="calculate">Calculer</button>
+    <p class="result" id="result"></p>
+  </div>
+  <script>
+    const num1 = document.getElementById('num1');
+    const num2 = document.getElementById('num2');
+    const operation = document.getElementById('operation');
+    const calculate = document.getElementById('calculate');
+    const result = document.getElementById('result');
+
+    calculate.addEventListener('click', () => {
+      const num1Value = parseFloat(num1.value);
+      const num2Value = parseFloat(num2.value);
+      const operationValue = operation.value;
+
+      if (isNaN(num1Value) || isNaN(num2Value)) {
+        result.textContent = 'Veuillez entrer des nombres valides';
+        return;
+      }
+
+      let resultValue;
+      switch (operationValue) {
+        case 'add':
+          resultValue = num1Value + num2Value;
+          break;
+        case 'subtract':
+          resultValue = num1Value - num2Value;
+          break;
+        case 'multiply':
+          resultValue = num1Value * num2Value;
+          break;
+        case 'divide':
+          if (num2Value === 0) {
+            result.textContent = 'Erreur : division par zéro';
+            return;
+          }
+          resultValue = num1Value / num2Value;
+          break;
+        default:
+          result.textContent = 'Erreur : opération non valide';
+          return;
+      }
+
+      result.textContent = `Résultat : ${resultValue}`;
+    });
+  </script>
 </html>
