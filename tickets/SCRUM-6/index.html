@@ -59,50 +59,44 @@
       <option value="multiply">Multiplication</option>
       <option value="divide">Division</option>
     </select>
-    <button class="button" id="calculate">Calculer</button>
+    <button class="button" onclick="calculate()">Calculer</button>
     <p class="result" id="result"></p>
   </div>
   <script>
-    const num1 = document.getElementById('num1');
-    const num2 = document.getElementById('num2');
-    const operation = document.getElementById('operation');
-    const calculate = document.getElementById('calculate');
-    const result = document.getElementById('result');
-
-    calculate.addEventListener('click', () => {
-      const num1Value = parseFloat(num1.value);
-      const num2Value = parseFloat(num2.value);
-      const operationValue = operation.value;
-
-      if (isNaN(num1Value) || isNaN(num2Value)) {
-        result.textContent = 'Veuillez entrer des nombres valides';
+    function calculate() {
+      var num1 = parseFloat(document.getElementById("num1").value);
+      var num2 = parseFloat(document.getElementById("num2").value);
+      var operation = document.getElementById("operation").value;
+      var result;
+      
+      if (isNaN(num1) || isNaN(num2)) {
+        document.getElementById("result").innerHTML = "Veuillez entrer des nombres valides";
         return;
       }
-
-      let resultValue;
-      switch (operationValue) {
-        case 'add':
-          resultValue = num1Value + num2Value;
+      
+      switch (operation) {
+        case "add":
+          result = num1 + num2;
           break;
-        case 'subtract':
-          resultValue = num1Value - num2Value;
+        case "subtract":
+          result = num1 - num2;
           break;
-        case 'multiply':
-          resultValue = num1Value * num2Value;
+        case "multiply":
+          result = num1 * num2;
           break;
-        case 'divide':
-          if (num2Value === 0) {
-            result.textContent = 'Erreur : division par zéro';
+        case "divide":
+          if (num2 === 0) {
+            document.getElementById("result").innerHTML = "Erreur : division par zéro";
             return;
           }
-          resultValue = num1Value / num2Value;
+          result = num1 / num2;
           break;
         default:
-          result.textContent = 'Erreur : opération non valide';
+          document.getElementById("result").innerHTML = "Erreur : opération non valide";
           return;
       }
-
-      result.textContent = `Résultat : ${resultValue}`;
-    });
+      
+      document.getElementById("result").innerHTML = "Résultat : " + result;
+    }
   </script>
 </html>
