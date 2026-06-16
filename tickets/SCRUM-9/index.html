@@ -23,23 +23,12 @@
       padding: 10px;
       font-size: 16px;
     }
-    #recherche-btn {
-      background-color: #4CAF50;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    #recherche-btn:hover {
-      background-color: #3e8e41;
-    }
   </style>
 </head>
 <body>
   <h1>Dashboard de salaire</h1>
   <input type="text" id="recherche" placeholder="Rechercher un client...">
-  <button id="recherche-btn">Rechercher</button>
+  <button id="filtrer">Filtrer</button>
   <table id="tableau">
     <thead>
       <tr>
@@ -47,7 +36,7 @@
         <th>Salaire</th>
       </tr>
     </thead>
-    <tbody id="tableau-body">
+    <tbody id="contenu">
       <tr>
         <td>Jean Dupont</td>
         <td>50000</td>
@@ -61,38 +50,34 @@
         <td>40000</td>
       </tr>
       <tr>
-        <td>Thomas Leroy</td>
+        <td>Lucas Leroy</td>
         <td>70000</td>
-      </tr>
-      <tr>
-        <td>Sophie Laurent</td>
-        <td>55000</td>
       </tr>
     </tbody>
   </table>
   <script>
-    const rechercheInput = document.getElementById('recherche');
-    const rechercheBtn = document.getElementById('recherche-btn');
-    const tableauBody = document.getElementById('tableau-body');
-    let clients = [
+    const recherche = document.getElementById('recherche');
+    const filtrer = document.getElementById('filtrer');
+    const contenu = document.getElementById('contenu');
+    const tableau = document.getElementById('tableau');
+    let donnees = [
       { nom: 'Jean Dupont', salaire: 50000 },
       { nom: 'Pierre Durand', salaire: 60000 },
       { nom: 'Marie Martin', salaire: 40000 },
-      { nom: 'Thomas Leroy', salaire: 70000 },
-      { nom: 'Sophie Laurent', salaire: 55000 }
+      { nom: 'Lucas Leroy', salaire: 70000 }
     ];
-    rechercheBtn.addEventListener('click', () => {
-      const recherche = rechercheInput.value.toLowerCase();
-      const resultats = clients.filter(client => client.nom.toLowerCase().includes(recherche));
-      tableauBody.innerHTML = '';
-      resultats.forEach(client => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${client.nom}</td>
-          <td>${client.salaire}</td>
-        `;
-        tableauBody.appendChild(row);
-      });
+    filtrer.addEventListener('click', () => {
+      const valeurRecherche = recherche.value.toLowerCase();
+      const lignes = contenu.getElementsByTagName('tr');
+      for (let i = 0; i < lignes.length; i++) {
+        const ligne = lignes[i];
+        const nom = ligne.getElementsByTagName('td')[0].textContent.toLowerCase();
+        if (nom.includes(valeurRecherche)) {
+          ligne.style.display = '';
+        } else {
+          ligne.style.display = 'none';
+        }
+      }
     });
   </script>
 </html>
