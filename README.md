@@ -1,319 +1,264 @@
-# Agentic SDLC
+# 🤖 Agentic SDLC
 
-Projet d'automatisation du cycle de vie logiciel avec des agents IA.
+> Un système d'ingénierie logicielle autonome qui transforme un ticket Jira en page web deployée — automatiquement.
 
-## Objectif
-
-Ce projet vise à construire progressivement un système capable de connecter :
-
-- Jira pour la gestion des tâches
-- GitHub pour la gestion du code
-- Groq/Llama pour l'intelligence artificielle
-- Python pour l'orchestration
-
-L'objectif final est de créer un assistant agentique capable de lire des tickets Jira, analyser les besoins, générer des propositions techniques, interagir avec GitHub et automatiser certaines étapes du cycle de développement logiciel.
+![Pipeline](https://img.shields.io/badge/Pipeline-Automated-brightgreen)
+![Python](https://img.shields.io/badge/Python-3.11+-blue)
+![Jira](https://img.shields.io/badge/Jira-Cloud-0052CC?logo=jira)
+![GitHub](https://img.shields.io/badge/GitHub-API-181717?logo=github)
+![Groq](https://img.shields.io/badge/Groq-Llama_3.3-orange)
+![Playwright](https://img.shields.io/badge/Tests-Playwright-45ba4b)
 
 ---
 
-## État actuel
+## 🎯 Vue d'ensemble
 
-- Connexion Jira : OK
-- Connexion GitHub : OK
-- Connexion Groq : OK
-- Lecture des tickets Jira : OK
-- Transition automatique des tickets Jira : OK
-- Génération automatique de code HTML : OK
-- Upload automatique sur GitHub : OK
-- Commentaires automatiques dans Jira : OK
+**Agentic SDLC** est un système multi-agents qui automatise le cycle de développement logiciel complet :
+
+```
+Ticket Jira (To Do)
+       │
+       ▼  30 secondes
+Orchestrator détecte
+       │
+       ▼
+Code Agent (Llama 3.3)
+  → Génère HTML/CSS/JS
+  → Upload sur GitHub
+       │
+       ▼
+Testing Agent (Playwright)
+  → Valide la structure HTML
+  → Teste dans Chromium
+  → Vérifie les erreurs JS
+       │
+       ├── ✅ Tests OK  → Jira : DONE
+       └── ❌ Tests KO  → Jira : TO DO (retry x3)
+```
+
+**Résultat :** Un ticket créé dans Jira devient une page web testée et archivée sur GitHub en moins de 60 secondes, sans intervention humaine.
 
 ---
 
-## Structure du projet
+## 🏗️ Architecture
 
-```text
-agentic-sdlc/
-├── .gitignore
-├── requirements.txt
-├── test_connections.py
-├── jira_agent.py
-├── code_agent.py
-├── README.md
-└── tickets/
-    ├── SCRUM-5/
-    │   └── index.html
-    ├── SCRUM-6/
-    │   └── index.html
-    └── SCRUM-7/
-        └── index.html
+```
+┌─────────────────────────────────────────────────────────┐
+│                    JIRA CLOUD                           │
+│         (Tickets : To Do / In Review / Done)           │
+└──────────────────────┬──────────────────────────────────┘
+                       │ Poll toutes les 30s
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│              ORCHESTRATOR (Python)                      │
+│  • Détecte les tickets "À faire"                       │
+│  • Coordonne Code Agent + Testing Agent                │
+│  • Gère les retries (max 3)                            │
+│  • Log toutes les actions                              │
+└──────────┬──────────────────────────┬───────────────────┘
+           │                          │
+           ▼                          ▼
+┌──────────────────┐      ┌──────────────────────────────┐
+│   CODE AGENT     │      │      TESTING AGENT           │
+│                  │      │                              │
+│ • Lit ticket     │      │ • Télécharge HTML (GitHub)  │
+│ • Prompt Llama   │      │ • Valide structure HTML      │
+│ • Génère HTML    │      │ • Ouvre dans Chromium        │
+│ • Upload GitHub  │      │ • Vérifie erreurs JS         │
+│ • Status: Review │      │ • Screenshot automatique     │
+└────────┬─────────┘      │ • Status: Done ou To Do      │
+         │                └──────────────────────────────┘
+         ▼
+┌─────────────────────────────────────────────────────────┐
+│                    GITHUB                               │
+│         tickets/SCRUM-X/index.html                     │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Installation
+## 🧰 Stack technique
 
-### 1. Cloner le projet
+| Composant | Technologie | Rôle |
+|-----------|-------------|------|
+| Orchestration | Python 3.11 | Coordination des agents |
+| API Ticketing | Jira REST API v3 | Source des tickets |
+| LLM | Groq / Llama 3.3 70B | Génération de code |
+| Stockage code | GitHub REST API | Versioning du code généré |
+| Tests navigateur | Playwright / Chromium | Validation E2E |
+| Variables | python-dotenv | Configuration sécurisée |
+
+---
+
+## 📁 Structure du projet
+
+```
+agentic-sdlc/
+├── orchestrator.py      # Cerveau du système — boucle principale
+├── code_agent.py        # Génération HTML via Llama + upload GitHub
+├── testing_agent.py     # Validation Playwright + mise à jour Jira
+├── jira_agent.py        # Utilitaires Jira (transitions, commentaires)
+├── test_connections.py  # Vérification initiale des APIs
+├── requirements.txt     # Dépendances Python
+├── .env.example         # Template de configuration
+├── .gitignore           # Exclusions Git
+├── tickets/             # Code généré par ticket
+│   ├── SCRUM-5/
+│   │   └── index.html
+│   ├── SCRUM-6/
+│   │   └── index.html
+│   └── ...
+└── screenshots/         # Screenshots Playwright par ticket
+    ├── SCRUM-5.png
+    └── ...
+```
+
+---
+
+## 🚀 Installation
+
+### Prérequis
+
+- Python 3.10+
+- Compte Jira Cloud (gratuit)
+- Compte GitHub
+- Clé API Groq (gratuite)
+
+### Étapes
 
 ```bash
+# 1. Cloner le repository
 git clone https://github.com/OmarNaceur2001/agentic-sdlc.git
 cd agentic-sdlc
-```
 
-### 2. Créer un environnement virtuel
-
-```bash
+# 2. Créer l'environnement virtuel
 python -m venv venv
-```
+venv\Scripts\activate      # Windows
+source venv/bin/activate   # Mac/Linux
 
-### 3. Activer l'environnement virtuel
-
-Sous Windows :
-
-```powershell
-venv\Scripts\activate
-```
-
-Sous macOS/Linux :
-
-```bash
-source venv/bin/activate
-```
-
-### 4. Installer les dépendances
-
-```bash
+# 3. Installer les dépendances
 pip install -r requirements.txt
-```
+playwright install chromium
 
----
+# 4. Configurer les variables
+cp .env.example .env
+# Éditer .env avec vos clés API
 
-## Configuration
-
-Créer un fichier `.env` à la racine du projet.
-
-Exemple :
-
-```env
-JIRA_URL=https://your-domain.atlassian.net
-JIRA_EMAIL=your-email@example.com
-JIRA_TOKEN=your-jira-token
-
-GITHUB_TOKEN=your-github-token
-GITHUB_REPO=your-username/agentic-sdlc
-
-GROQ_API_KEY=your-groq-api-key
-GROQ_MODEL=llama-3.3-70b-versatile
-
-JIRA_PROJECT_KEY=SCRUM
-JIRA_SOURCE_STATUS=À faire
-JIRA_PROGRESS_STATUS=En cours
-JIRA_REVIEW_STATUS=Revue en cours
-```
-
-> Important : le fichier `.env` contient des informations sensibles. Il ne doit jamais être envoyé sur GitHub.
-
----
-
-## Semaine 1 — Setup des connexions API
-
-Le fichier `test_connections.py` permet de tester les connexions vers :
-
-- Jira Cloud
-- GitHub
-- Groq/Llama
-
-### Exécution
-
-```bash
+# 5. Vérifier les connexions
 python test_connections.py
-```
 
-### Résultat attendu
-
-```text
-🚀 Démarrage des tests API...
-
-🔵 Test de connexion Jira...
-   ✅ Jira OK
-
-🐙 Test de connexion GitHub...
-   ✅ GitHub OK
-
-🤖 Test de connexion Groq (Llama)...
-   ✅ Groq OK
-
-🎉 Tests terminés.
-```
-
----
-
-## Semaine 2 — Jira Agent
-
-Le fichier `jira_agent.py` automatise le traitement des tickets Jira.
-
-### Fonctionnalités
-
-- Lire les tickets Jira à traiter
-- Afficher les informations principales :
-  - clé du ticket
-  - titre
-  - statut
-  - description
-- Déplacer automatiquement les tickets depuis `À faire` vers `En cours`
-
-### Variables d'environnement nécessaires
-
-```env
-JIRA_PROJECT_KEY=SCRUM
-JIRA_SOURCE_STATUS=À faire
-JIRA_TARGET_STATUS=En cours
-```
-
-### Exécution
-
-```bash
-python jira_agent.py
-```
-
----
-
-## Semaine 3 — Code Generation Agent
-
-Le fichier `code_agent.py` automatise la génération de code à partir des tickets Jira.
-
-### Fonctionnalités
-
-- Lire les tickets Jira à traiter
-- Passer les tickets vers `En cours`
-- Générer une page HTML complète avec Groq/Llama
-- Publier le fichier généré dans GitHub
-- Ajouter un commentaire Jira avec le lien du fichier généré
-- Passer les tickets vers `In Review` / `Revue en cours`
-
-### Variables d'environnement nécessaires
-
-```env
-JIRA_PROJECT_KEY=SCRUM
-JIRA_SOURCE_STATUS=À faire
-JIRA_PROGRESS_STATUS=En cours
-JIRA_REVIEW_STATUS=Revue en cours
-
-GITHUB_REPO=OmarNaceur2001/agentic-sdlc
-GROQ_MODEL=llama-3.3-70b-versatile
-```
-
-### Exécution
-
-```bash
-python code_agent.py
-```
-
----
-
-## Semaine 4 — Orchestrator
-
-Le fichier `orchestrator.py` représente le cerveau du système Agentic SDLC.
-
-### Fonctionnalités
-
-- Surveiller Jira en continu
-- Effectuer un polling automatique toutes les X secondes
-- Détecter les tickets prêts à être traités
-- Déclencher automatiquement le Code Agent
-- Générer du code avec Groq/Llama
-- Publier le code généré sur GitHub
-- Ajouter un commentaire Jira
-- Déplacer les tickets vers `In Review`
-- Écrire les logs dans `orchestrator.log`
-- S'arrêter proprement avec `Ctrl+C`
-
-### Variable d'environnement
-
-```env
-POLL_INTERVAL_SECONDS=30
-```
-
-### Exécution
-
-```bash
+# 6. Lancer le pipeline
 python orchestrator.py
 ```
 
-### Workflow
+---
 
-```text
-orchestrator.py
-    ↓
-Poll Jira
-    ↓
-Ticket À faire détecté ?
-    ↓ oui
-code_agent.py
-    ↓
-Groq/Llama → GitHub → Jira
-    ↓
-Pause puis nouveau cycle
+## ⚙️ Configuration `.env`
+
+```env
+# Jira
+JIRA_URL=https://votre-domaine.atlassian.net
+JIRA_EMAIL=votre-email@gmail.com
+JIRA_TOKEN=votre-token-jira
+JIRA_PROJECT_KEY=SCRUM
+
+# GitHub
+GITHUB_TOKEN=votre-token-github
+GITHUB_REPO=username/agentic-sdlc
+
+# Groq (LLM)
+GROQ_API_KEY=votre-cle-groq
+GROQ_MODEL=llama-3.3-70b-versatile
+
+# Orchestrator
+POLL_INTERVAL_SECONDS=30
+MAX_RETRIES=3
+
+# Statuts Jira
+JIRA_REVIEW_STATUS=Revue en cours
+JIRA_DONE_STATUS=Terminé(e)
+JIRA_REOPEN_STATUS=À faire
 ```
 
 ---
 
-## Sécurité
+## 🔄 Workflow détaillé
 
-Les fichiers suivants ne doivent jamais être envoyés sur GitHub :
+### 1. Créer un ticket dans Jira
 
-```text
-.env
-venv/
-__pycache__/
+```
+Title: Create a login page
+Description: Simple login form with email and password fields
+Status: To Do
 ```
 
-Le fichier `.gitignore` doit contenir au minimum :
+### 2. L'Orchestrator détecte le ticket (≤ 30s)
 
-```gitignore
-.env
-venv/
-__pycache__/
-*.pyc
+```
+2026-06-16 23:38:24  INFO  [CODE AGENT] Traitement : SCRUM-10
+```
+
+### 3. Le Code Agent génère et uploade
+
+```
+✅ Code généré (1282 caractères)
+✅ Fichier uploadé : github.com/.../tickets/SCRUM-10/index.html
+```
+
+### 4. Le Testing Agent valide
+
+```
+✅ Structure HTML valide
+✅ Page chargée : 78 caractères visibles
+✅ Aucune erreur JavaScript
+📸 Screenshot : screenshots/SCRUM-10.png
+```
+
+### 5. Résultat dans Jira
+
+```
+Status : Terminé(e) ✅
+Commentaire : Tests automatiques réussis + rapport complet
 ```
 
 ---
 
-## Roadmap
+## 📊 Résultats obtenus
 
-### Semaine 1
+| Ticket | Description | Résultat | Temps |
+|--------|-------------|----------|-------|
+| SCRUM-5 | Login page | ✅ DONE | ~45s |
+| SCRUM-6 | Calculator | ✅ DONE | ~45s |
+| SCRUM-7 | Contact form | ✅ DONE | ~45s |
+| SCRUM-9 | Salary dashboard | ✅ DONE | ~45s |
+| SCRUM-10 | Profile page | ✅ DONE | ~49s |
+| SCRUM-11 | Profile page | ✅ DONE | ~49s |
 
-- Initialisation du projet
-- Connexion Jira
-- Connexion GitHub
-- Connexion Groq
-
-### Semaine 2
-
-- Lecture des tickets Jira
-- Extraction des informations principales
-- Transition automatique des tickets vers `En cours`
-
-### Semaine 3
-
-- Génération de code HTML avec Groq/Llama
-- Upload automatique des fichiers dans GitHub
-- Ajout automatique de commentaires dans Jira
-- Transition automatique des tickets vers `In Review`
-
-### Semaine 4
-
-- Création automatique de GitHub Issues
-- Liaison entre tickets Jira et tâches GitHub
-- Génération de branches Git par ticket
-
-### Semaine 5
-
-- Génération automatique de pull requests
-- Amélioration du workflow agentique
-- Ajout de logs et monitoring
+**Temps moyen ticket → DONE : ~47 secondes**
 
 ---
 
-## Auteur
+## 🗺️ Roadmap
 
-Omar Naceur
+- [x] Jira Agent — lecture et mise à jour des tickets
+- [x] Code Agent — génération HTML avec Llama 3.3
+- [x] Testing Agent — validation Playwright
+- [x] Orchestrator — pipeline complet avec retry
+- [ ] Deploy Agent — GitHub Pages automatique
+- [ ] Multi-Agent — Developer + Tester + DevOps Agent
+- [ ] Dashboard — interface de monitoring en temps réel
 
+---
+
+## 👨‍💻 Auteur
+
+**Omar Naceur**
+Étudiant ingénieur AI & Data Science — ESPRIM (ESPRIT), Monastir, Tunisie
+
+[![GitHub](https://img.shields.io/badge/GitHub-OmarNaceur2001-181717?logo=github)](https://github.com/OmarNaceur2001)
+
+---
+
+## 📄 Licence
+
+MIT License — libre d'utilisation et de modification.
