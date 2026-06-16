@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Formulaire de contact</title>
+  <title>Contact Form</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -20,15 +20,20 @@
     }
     input, textarea {
       width: 100%;
-      padding: 10px;
+      height: 40px;
       margin-bottom: 20px;
+      padding: 10px;
       border: 1px solid #ccc;
+    }
+    textarea {
+      height: 100px;
     }
     button {
       width: 100%;
-      padding: 10px;
+      height: 40px;
       background-color: #4CAF50;
       color: #fff;
+      padding: 10px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -39,15 +44,15 @@
   </style>
 </head>
 <body>
-  <h1>Formulaire de contact</h1>
+  <h1>Contact Form</h1>
   <form id="contact-form">
-    <label for="name">Nom :</label>
+    <label for="name">Name:</label>
     <input type="text" id="name" name="name" required>
-    <label for="email">Adresse e-mail :</label>
+    <label for="email">Email:</label>
     <input type="email" id="email" name="email" required>
-    <label for="message">Message :</label>
+    <label for="message">Message:</label>
     <textarea id="message" name="message" required></textarea>
-    <button type="submit">Envoyer</button>
+    <button type="submit">Send Message</button>
   </form>
   <script>
     const form = document.getElementById('contact-form');
@@ -56,7 +61,7 @@
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       const message = document.getElementById('message').value;
-      alert(`Merci ${name} pour votre message. Nous vous contacterons à l'adresse ${email} dès que possible.`);
+      alert(`Name: ${name}\nEmail: ${email}\nMessage: ${message}`);
     });
   </script>
 </html>
