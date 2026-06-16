@@ -45,12 +45,12 @@
       padding: 10px;
       border: none;
       border-radius: 5px;
-      background-color: #5f5f6f;
+      background-color: #4f4f5f;
       color: #fff;
       cursor: pointer;
     }
     .btn:hover {
-      background-color: #6f6f7f;
+      background-color: #5f5f6f;
     }
     .error {
       color: #ff0000;
@@ -65,14 +65,13 @@
     <form id="login-form">
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Enter your email">
-        <div class="error" id="email-error"></div>
+        <input type="email" id="email" required>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password">
-        <div class="error" id="password-error"></div>
+        <input type="password" id="password" required>
       </div>
+      <div class="error" id="error-message"></div>
       <button class="btn" type="submit">Login</button>
     </form>
   </div>
@@ -80,29 +79,23 @@
     const form = document.getElementById('login-form');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
-    const emailError = document.getElementById('email-error');
-    const passwordError = document.getElementById('password-error');
+    const errorMessage = document.getElementById('error-message');
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
+      const email = emailInput.value;
+      const password = passwordInput.value;
 
-      if (email === '') {
-        emailError.textContent = 'Please enter your email';
+      if (email === '' || password === '') {
+        errorMessage.textContent = 'Please fill in all fields';
+      } else if (!email.includes('@')) {
+        errorMessage.textContent = 'Invalid email address';
+      } else if (password.length < 8) {
+        errorMessage.textContent = 'Password must be at least 8 characters long';
       } else {
-        emailError.textContent = '';
-      }
-
-      if (password === '') {
-        passwordError.textContent = 'Please enter your password';
-      } else {
-        passwordError.textContent = '';
-      }
-
-      if (email !== '' && password !== '') {
-        // Login logic here (just a demo, no actual login)
-        alert('Login successful!');
+        errorMessage.textContent = '';
+        // Login successful, you can add your own logic here
+        console.log('Login successful');
       }
     });
   </script>
