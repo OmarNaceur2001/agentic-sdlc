@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard de salaire</title>
+  <style>
+    body {
+      background-color: #1a1a2e;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #2f2f3f;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header input {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      width: 50%;
+    }
+    .header button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4f4f63;
+      color: #fff;
+      cursor: pointer;
+    }
+    .header button:hover {
+      background-color: #5f5f73;
+    }
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .card {
+      margin: 10px;
+      padding: 20px;
+      background-color: #3f3f53;
+      border-radius: 10px;
+      width: 200px;
+    }
+    .card h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <input type="text" id="search" placeholder="Rechercher un client">
+      <button id="filter">Filtrer</button>
+    </div>
+    <div class="cards" id="cards"></div>
+  </div>
+  <script>
+    const clients = [
+      { nom: "Client 1", salaire: 50000 },
+      { nom: "Client 2", salaire: 60000 },
+      { nom: "Client 3", salaire: 70000 },
+      { nom: "Client 4", salaire: 80000 },
+      { nom: "Client 5", salaire: 90000 },
+    ];
+
+    const cards = document.getElementById("cards");
+    const search = document.getElementById("search");
+    const filter = document.getElementById("filter");
+
+    function renderCards(clients) {
+      cards.innerHTML = "";
+      clients.forEach((client) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerHTML = `
+          <h2>${client.nom}</h2>
+          <p>Salaire : ${client.salaire}</p>
+        `;
+        cards.appendChild(card);
+      });
+    }
+
+    renderCards(clients);
+
+    filter.addEventListener("click", () => {
+      const searchValue = search.value.toLowerCase();
+      const filteredClients = clients.filter((client) => client.nom.toLowerCase().includes(searchValue));
+      renderCards(filteredClients);
+    });
+
+    search.addEventListener("input", () => {
+      const searchValue = search.value.toLowerCase();
+      const filteredClients = clients.filter((client) => client.nom.toLowerCase().includes(searchValue));
+      renderCards(filteredClients);
+    });
+  </script>
+</html>
