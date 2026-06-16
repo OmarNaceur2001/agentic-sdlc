@@ -1,41 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Tableau de bord d'analyse</title>
+  <title>Analytics Dashboard</title>
   <style>
     body {
       font-family: Arial, sans-serif;
     }
-    .container {
-      width: 80%;
-      margin: 40px auto;
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
     }
     .chart {
-      width: 100%;
-      height: 200px;
+      width: 500px;
+      height: 300px;
       border: 1px solid #ccc;
+      margin: 20px;
     }
     .chart svg {
       width: 100%;
       height: 100%;
     }
     .statistics {
-      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-    .statistics ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .statistics li {
-      margin-bottom: 10px;
+    .statistic {
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 200px;
+      text-align: center;
     }
     button {
-      background-color: #4CAF50;
-      color: #fff;
+      margin: 20px;
       padding: 10px 20px;
       border: none;
       border-radius: 5px;
+      background-color: #4CAF50;
+      color: #fff;
       cursor: pointer;
     }
     button:hover {
@@ -44,40 +50,42 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Tableau de bord d'analyse</h1>
+  <div class="dashboard">
+    <h1>Analytics Dashboard</h1>
     <div class="chart">
       <svg>
-        <rect x="10" y="10" width="100" height="50" fill="#ccc" />
-        <rect x="120" y="10" width="100" height="100" fill="#ccc" />
-        <rect x="230" y="10" width="100" height="150" fill="#ccc" />
+        <circle cx="250" cy="150" r="100" fill="#4CAF50" />
+        <circle cx="250" cy="150" r="50" fill="#fff" />
+        <text x="250" y="160" text-anchor="middle" font-size="24">50%</text>
       </svg>
     </div>
     <div class="statistics">
-      <h2>Statistiques</h2>
-      <ul>
-        <li>Nombre de visites : 1000</li>
-        <li>Nombre de pages vues : 5000</li>
-        <li>Temps de chargement moyen : 2s</li>
-      </ul>
+      <div class="statistic">
+        <h2>Users</h2>
+        <p>1000</p>
+      </div>
+      <div class="statistic">
+        <h2>Views</h2>
+        <p>5000</p>
+      </div>
+      <div class="statistic">
+        <h2>Clicks</h2>
+        <p>2000</p>
+      </div>
     </div>
-    <button id="update-button">Mettre à jour les statistiques</button>
-    <button id="reset-button">Réinitialiser les statistiques</button>
+    <button>Refresh</button>
+    <button>Export</button>
   </div>
   <script>
-    document.getElementById("update-button").addEventListener("click", function() {
-      document.querySelector(".statistics ul").innerHTML = `
-        <li>Nombre de visites : 1200</li>
-        <li>Nombre de pages vues : 6000</li>
-        <li>Temps de chargement moyen : 1.5s</li>
-      `;
-    });
-    document.getElementById("reset-button").addEventListener("click", function() {
-      document.querySelector(".statistics ul").innerHTML = `
-        <li>Nombre de visites : 1000</li>
-        <li>Nombre de pages vues : 5000</li>
-        <li>Temps de chargement moyen : 2s</li>
-      `;
+    document.addEventListener("DOMContentLoaded", function() {
+      const refreshButton = document.querySelector("button:first-child");
+      const exportButton = document.querySelector("button:last-child");
+      refreshButton.addEventListener("click", function() {
+        alert("Data refreshed!");
+      });
+      exportButton.addEventListener("click", function() {
+        alert("Data exported!");
+      });
     });
   </script>
 </html>
