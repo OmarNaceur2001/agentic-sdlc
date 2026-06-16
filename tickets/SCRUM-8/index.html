@@ -40,6 +40,7 @@
             padding: 20px;
             background-color: #3f3f4f;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
         .chart h2 {
             font-size: 18px;
@@ -58,11 +59,12 @@
             margin-top: 20px;
         }
         .stat {
-            width: 20%;
+            width: 45%;
             margin: 20px;
             padding: 20px;
             background-color: #3f3f4f;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
         .stat h2 {
             font-size: 18px;
@@ -94,19 +96,11 @@
         <div class="stats">
             <div class="stat">
                 <h2>Statistique 1</h2>
-                <p>100</p>
+                <p>Nombre de visites : 1000</p>
             </div>
             <div class="stat">
                 <h2>Statistique 2</h2>
-                <p>200</p>
-            </div>
-            <div class="stat">
-                <h2>Statistique 3</h2>
-                <p>300</p>
-            </div>
-            <div class="stat">
-                <h2>Statistique 4</h2>
-                <p>400</p>
+                <p>Nombre de pages vues : 5000</p>
             </div>
         </div>
     </div>
@@ -118,8 +112,8 @@
             data: {
                 labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai'],
                 datasets: [{
-                    label: 'Données',
-                    data: [10, 20, 30, 40, 50],
+                    label: 'Nombre de visites',
+                    data: [100, 200, 300, 400, 500],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
@@ -150,8 +144,8 @@
             data: {
                 labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai'],
                 datasets: [{
-                    label: 'Données',
-                    data: [10, 20, 30, 40, 50],
+                    label: 'Nombre de pages vues',
+                    data: [1000, 2000, 3000, 4000, 5000],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
