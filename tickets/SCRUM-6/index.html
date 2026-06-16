@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Calculator</title>
+  <title>Calculatrice</title>
   <style>
     body {
       font-family: Arial, sans-serif;
     }
-    #calculator {
+    #calculatrice {
       width: 200px;
       margin: 50px auto;
       padding: 20px;
@@ -14,189 +14,88 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    #display {
+    #calculatrice input {
       width: 100%;
-      height: 40px;
-      margin-bottom: 20px;
+      height: 30px;
+      margin-bottom: 10px;
       padding: 10px;
-      border: none;
-      border-radius: 10px;
-      font-size: 24px;
-      text-align: right;
+      border: 1px solid #ccc;
     }
-    button {
-      width: 45px;
-      height: 45px;
-      margin: 5px;
+    #calculatrice button {
+      width: 100%;
+      height: 30px;
+      margin-bottom: 10px;
       padding: 10px;
       border: none;
-      border-radius: 10px;
-      background-color: #f0f0f0;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: #fff;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #ccc;
+    #calculatrice button:hover {
+      background-color: #3e8e41;
     }
   </style>
 </head>
 <body>
-  <div id="calculator">
-    <input type="text" id="display" disabled>
-    <div>
-      <button id="btn-7">7</button>
-      <button id="btn-8">8</button>
-      <button id="btn-9">9</button>
-      <button id="btn-divide">/</button>
-    </div>
-    <div>
-      <button id="btn-4">4</button>
-      <button id="btn-5">5</button>
-      <button id="btn-6">6</button>
-      <button id="btn-multiply">*</button>
-    </div>
-    <div>
-      <button id="btn-1">1</button>
-      <button id="btn-2">2</button>
-      <button id="btn-3">3</button>
-      <button id="btn-subtract">-</button>
-    </div>
-    <div>
-      <button id="btn-0">0</button>
-      <button id="btn-clear">C</button>
-      <button id="btn-equal">=</button>
-      <button id="btn-add">+</button>
-    </div>
+  <div id="calculatrice">
+    <input type="number" id="num1" placeholder="Nombre 1">
+    <input type="number" id="num2" placeholder="Nombre 2">
+    <button id="add">Additionner</button>
+    <button id="subtract">Soustraire</button>
+    <button id="multiply">Multiplier</button>
+    <button id="divide">Diviser</button>
+    <p id="resultat"></p>
   </div>
   <script>
-    let display = document.getElementById('display');
-    let num1 = '';
-    let num2 = '';
-    let operator = '';
-    document.getElementById('btn-0').addEventListener('click', function() {
-      if (operator === '') {
-        num1 += '0';
-        display.value = num1;
+    const num1 = document.getElementById('num1');
+    const num2 = document.getElementById('num2');
+    const add = document.getElementById('add');
+    const subtract = document.getElementById('subtract');
+    const multiply = document.getElementById('multiply');
+    const divide = document.getElementById('divide');
+    const resultat = document.getElementById('resultat');
+
+    add.addEventListener('click', () => {
+      const n1 = parseFloat(num1.value);
+      const n2 = parseFloat(num2.value);
+      if (!isNaN(n1) && !isNaN(n2)) {
+        resultat.textContent = `Résultat : ${n1 + n2}`;
       } else {
-        num2 += '0';
-        display.value = num1 + operator + num2;
+        resultat.textContent = 'Veuillez entrer des nombres valides';
       }
     });
-    document.getElementById('btn-1').addEventListener('click', function() {
-      if (operator === '') {
-        num1 += '1';
-        display.value = num1;
+
+    subtract.addEventListener('click', () => {
+      const n1 = parseFloat(num1.value);
+      const n2 = parseFloat(num2.value);
+      if (!isNaN(n1) && !isNaN(n2)) {
+        resultat.textContent = `Résultat : ${n1 - n2}`;
       } else {
-        num2 += '1';
-        display.value = num1 + operator + num2;
+        resultat.textContent = 'Veuillez entrer des nombres valides';
       }
     });
-    document.getElementById('btn-2').addEventListener('click', function() {
-      if (operator === '') {
-        num1 += '2';
-        display.value = num1;
+
+    multiply.addEventListener('click', () => {
+      const n1 = parseFloat(num1.value);
+      const n2 = parseFloat(num2.value);
+      if (!isNaN(n1) && !isNaN(n2)) {
+        resultat.textContent = `Résultat : ${n1 * n2}`;
       } else {
-        num2 += '2';
-        display.value = num1 + operator + num2;
+        resultat.textContent = 'Veuillez entrer des nombres valides';
       }
     });
-    document.getElementById('btn-3').addEventListener('click', function() {
-      if (operator === '') {
-        num1 += '3';
-        display.value = num1;
+
+    divide.addEventListener('click', () => {
+      const n1 = parseFloat(num1.value);
+      const n2 = parseFloat(num2.value);
+      if (!isNaN(n1) && !isNaN(n2) && n2 !== 0) {
+        resultat.textContent = `Résultat : ${n1 / n2}`;
+      } else if (n2 === 0) {
+        resultat.textContent = 'Erreur : division par zéro';
       } else {
-        num2 += '3';
-        display.value = num1 + operator + num2;
+        resultat.textContent = 'Veuillez entrer des nombres valides';
       }
-    });
-    document.getElementById('btn-4').addEventListener('click', function() {
-      if (operator === '') {
-        num1 += '4';
-        display.value = num1;
-      } else {
-        num2 += '4';
-        display.value = num1 + operator + num2;
-      }
-    });
-    document.getElementById('btn-5').addEventListener('click', function() {
-      if (operator === '') {
-        num1 += '5';
-        display.value = num1;
-      } else {
-        num2 += '5';
-        display.value = num1 + operator + num2;
-      }
-    });
-    document.getElementById('btn-6').addEventListener('click', function() {
-      if (operator === '') {
-        num1 += '6';
-        display.value = num1;
-      } else {
-        num2 += '6';
-        display.value = num1 + operator + num2;
-      }
-    });
-    document.getElementById('btn-7').addEventListener('click', function() {
-      if (operator === '') {
-        num1 += '7';
-        display.value = num1;
-      } else {
-        num2 += '7';
-        display.value = num1 + operator + num2;
-      }
-    });
-    document.getElementById('btn-8').addEventListener('click', function() {
-      if (operator === '') {
-        num1 += '8';
-        display.value = num1;
-      } else {
-        num2 += '8';
-        display.value = num1 + operator + num2;
-      }
-    });
-    document.getElementById('btn-9').addEventListener('click', function() {
-      if (operator === '') {
-        num1 += '9';
-        display.value = num1;
-      } else {
-        num2 += '9';
-        display.value = num1 + operator + num2;
-      }
-    });
-    document.getElementById('btn-add').addEventListener('click', function() {
-      operator = '+';
-      display.value = num1 + operator;
-    });
-    document.getElementById('btn-subtract').addEventListener('click', function() {
-      operator = '-';
-      display.value = num1 + operator;
-    });
-    document.getElementById('btn-multiply').addEventListener('click', function() {
-      operator = '*';
-      display.value = num1 + operator;
-    });
-    document.getElementById('btn-divide').addEventListener('click', function() {
-      operator = '/';
-      display.value = num1 + operator;
-    });
-    document.getElementById('btn-equal').addEventListener('click', function() {
-      if (operator === '+') {
-        display.value = parseInt(num1) + parseInt(num2);
-      } else if (operator === '-') {
-        display.value = parseInt(num1) - parseInt(num2);
-      } else if (operator === '*') {
-        display.value = parseInt(num1) * parseInt(num2);
-      } else if (operator === '/') {
-        display.value = parseInt(num1) / parseInt(num2);
-      }
-      num1 = display.value;
-      num2 = '';
-      operator = '';
-    });
-    document.getElementById('btn-clear').addEventListener('click', function() {
-      display.value = '';
-      num1 = '';
-      num2 = '';
-      operator = '';
     });
   </script>
 </html>
