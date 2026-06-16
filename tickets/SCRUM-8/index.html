@@ -1,118 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Tableau de bord d'analyse</title>
+  <title>Analytics Dashboard</title>
   <style>
     body {
-      background-color: #1a1a2e;
       font-family: Arial, sans-serif;
-      color: #fff;
     }
-    .container {
-      max-width: 1200px;
-      margin: 40px auto;
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: 20px;
-      background-color: #2f2f3f;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    }
-    .card {
-      background-color: #3f3f4f;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    .card h2 {
-      margin-top: 0;
     }
     .chart {
-      width: 100%;
-      height: 200px;
-      background-color: #4f4f5f;
-      border-radius: 10px;
-      padding: 20px;
+      width: 500px;
+      height: 300px;
+      border: 1px solid #ccc;
+      margin: 20px;
     }
     .chart svg {
       width: 100%;
       height: 100%;
     }
+    .statistics {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .statistic {
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 200px;
+      text-align: center;
+    }
     button {
-      background-color: #6f6f7f;
-      color: #fff;
-      border: none;
+      margin: 20px;
       padding: 10px 20px;
-      border-radius: 5px;
+      border: none;
+      border-radius: 10px;
+      background-color: #4CAF50;
+      color: #fff;
       cursor: pointer;
     }
     button:hover {
-      background-color: #7f7f8f;
-    }
-    form {
-      margin-top: 20px;
-    }
-    label {
-      display: block;
-      margin-bottom: 10px;
-    }
-    input[type="text"] {
-      width: 100%;
-      height: 40px;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      background-color: #4f4f5f;
-      color: #fff;
-    }
-    input[type="submit"] {
-      background-color: #6f6f7f;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    input[type="submit"]:hover {
-      background-color: #7f7f8f;
+      background-color: #3e8e41;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Tableau de bord d'analyse</h1>
-    <div class="card">
-      <h2>Statistiques</h2>
-      <p>Nombre de visites : 1000</p>
-      <p>Nombre de pages vues : 5000</p>
+  <div class="dashboard">
+    <h1>Analytics Dashboard</h1>
+    <div class="chart">
+      <svg>
+        <circle cx="250" cy="150" r="100" fill="#4CAF50" />
+        <circle cx="250" cy="150" r="50" fill="#fff" />
+        <text x="250" y="160" font-size="24" text-anchor="middle">50%</text>
+      </svg>
     </div>
-    <div class="card">
-      <h2>Graphique</h2>
-      <div class="chart">
-        <svg>
-          <rect x="10" y="10" width="100" height="50" fill="#6f6f7f" />
-          <rect x="120" y="10" width="100" height="100" fill="#7f7f8f" />
-          <rect x="230" y="10" width="100" height="150" fill="#8f8f9f" />
-        </svg>
+    <div class="statistics">
+      <div class="statistic">
+        <h2>Visitors</h2>
+        <p>1000</p>
+      </div>
+      <div class="statistic">
+        <h2>Page Views</h2>
+        <p>5000</p>
+      </div>
+      <div class="statistic">
+        <h2>Bounce Rate</h2>
+        <p>20%</p>
       </div>
     </div>
-    <form>
-      <label for="name">Nom :</label>
-      <input type="text" id="name" name="name" required>
-      <label for="email">Email :</label>
-      <input type="text" id="email" name="email" required>
-      <input type="submit" value="Envoyer">
-    </form>
+    <button>Refresh Data</button>
+    <button>Export to CSV</button>
   </div>
   <script>
-    const form = document.querySelector('form');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.querySelector('#name').value;
-      const email = document.querySelector('#email').value;
-      if (name && email) {
-        alert('Formulaire envoyé avec succès !');
-      } else {
-        alert('Veuillez remplir tous les champs !');
-      }
+    document.addEventListener("DOMContentLoaded", function() {
+      const refreshButton = document.querySelector("button:first-child");
+      const exportButton = document.querySelector("button:last-child");
+      refreshButton.addEventListener("click", function() {
+        alert("Data refreshed!");
+      });
+      exportButton.addEventListener("click", function() {
+        alert("Data exported to CSV!");
+      });
     });
   </script>
 </html>
