@@ -4,103 +4,95 @@
   <title>Dashboard de salaire</title>
   <style>
     body {
-      background-color: #1a1a2e;
       font-family: Arial, sans-serif;
     }
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background-color: #2f2f3f;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    table {
+      border-collapse: collapse;
+      width: 100%;
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .header input {
+    th, td {
+      border: 1px solid #ddd;
       padding: 10px;
-      border: none;
-      border-radius: 5px;
-      width: 50%;
+      text-align: left;
     }
-    .header button {
+    th {
+      background-color: #f0f0f0;
+    }
+    #recherche {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #recherche-btn {
+      background-color: #4CAF50;
+      color: #fff;
       padding: 10px 20px;
       border: none;
       border-radius: 5px;
-      background-color: #4f4f63;
-      color: #fff;
       cursor: pointer;
     }
-    .header button:hover {
-      background-color: #5f5f73;
-    }
-    .cards {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .card {
-      margin: 10px;
-      padding: 20px;
-      background-color: #3f3f53;
-      border-radius: 10px;
-      width: 200px;
-    }
-    .card h2 {
-      margin-top: 0;
+    #recherche-btn:hover {
+      background-color: #3e8e41;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <input type="text" id="search" placeholder="Rechercher un client">
-      <button id="filter">Filtrer</button>
-    </div>
-    <div class="cards" id="cards"></div>
-  </div>
+  <h1>Dashboard de salaire</h1>
+  <input type="text" id="recherche" placeholder="Rechercher un client...">
+  <button id="recherche-btn">Rechercher</button>
+  <table id="tableau">
+    <thead>
+      <tr>
+        <th>Nom du client</th>
+        <th>Salaire</th>
+      </tr>
+    </thead>
+    <tbody id="tableau-body">
+      <tr>
+        <td>Jean Dupont</td>
+        <td>50000</td>
+      </tr>
+      <tr>
+        <td>Pierre Durand</td>
+        <td>60000</td>
+      </tr>
+      <tr>
+        <td>Marie Martin</td>
+        <td>40000</td>
+      </tr>
+      <tr>
+        <td>Thomas Leroy</td>
+        <td>70000</td>
+      </tr>
+      <tr>
+        <td>Sophie Laurent</td>
+        <td>55000</td>
+      </tr>
+    </tbody>
+  </table>
   <script>
-    const clients = [
-      { nom: "Client 1", salaire: 50000 },
-      { nom: "Client 2", salaire: 60000 },
-      { nom: "Client 3", salaire: 70000 },
-      { nom: "Client 4", salaire: 80000 },
-      { nom: "Client 5", salaire: 90000 },
+    const rechercheInput = document.getElementById('recherche');
+    const rechercheBtn = document.getElementById('recherche-btn');
+    const tableauBody = document.getElementById('tableau-body');
+    let clients = [
+      { nom: 'Jean Dupont', salaire: 50000 },
+      { nom: 'Pierre Durand', salaire: 60000 },
+      { nom: 'Marie Martin', salaire: 40000 },
+      { nom: 'Thomas Leroy', salaire: 70000 },
+      { nom: 'Sophie Laurent', salaire: 55000 }
     ];
-
-    const cards = document.getElementById("cards");
-    const search = document.getElementById("search");
-    const filter = document.getElementById("filter");
-
-    function renderCards(clients) {
-      cards.innerHTML = "";
-      clients.forEach((client) => {
-        const card = document.createElement("div");
-        card.classList.add("card");
-        card.innerHTML = `
-          <h2>${client.nom}</h2>
-          <p>Salaire : ${client.salaire}</p>
+    rechercheBtn.addEventListener('click', () => {
+      const recherche = rechercheInput.value.toLowerCase();
+      const resultats = clients.filter(client => client.nom.toLowerCase().includes(recherche));
+      tableauBody.innerHTML = '';
+      resultats.forEach(client => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${client.nom}</td>
+          <td>${client.salaire}</td>
         `;
-        cards.appendChild(card);
+        tableauBody.appendChild(row);
       });
-    }
-
-    renderCards(clients);
-
-    filter.addEventListener("click", () => {
-      const searchValue = search.value.toLowerCase();
-      const filteredClients = clients.filter((client) => client.nom.toLowerCase().includes(searchValue));
-      renderCards(filteredClients);
-    });
-
-    search.addEventListener("input", () => {
-      const searchValue = search.value.toLowerCase();
-      const filteredClients = clients.filter((client) => client.nom.toLowerCase().includes(searchValue));
-      renderCards(filteredClients);
     });
   </script>
 </html>
