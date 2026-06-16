@@ -37,6 +37,7 @@ def main() -> None:
     log.info(f"Orchestrator demarre -- poll toutes les {POLL_INTERVAL}s")
     cycle = 0
     total = 0
+    tickets_deja_traites = set()
 
     try:
         while True:
@@ -54,13 +55,17 @@ def main() -> None:
                         tid   = ticket.get("key", "?")
                         titre = ticket.get("fields", {}).get("summary", "")
                         log.info(f"Traitement : {tid} -- {titre}")
+                        if tid in tickets_deja_traites:
+                            log.info(f"{tid} deja traite pendant cette session -- ignore")
+                            continue
+
                         try:
                             traiter_ticket(ticket)
+                            tickets_deja_traites.add(tid)
                             total += 1
                             log.info(f"{tid} traite avec succes")
                         except Exception as e:
                             log.error(f"Erreur sur {tid}: {e}")
-                log.info(f"Total traites depuis demarrage : {total}")
             except Exception as e:
                 log.error(f"Erreur cycle #{cycle}: {e}")
 

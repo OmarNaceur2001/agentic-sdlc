@@ -174,23 +174,6 @@ JIRA_TARGET_STATUS=En cours
 python jira_agent.py
 ```
 
-### Exemple de résultat
-
-```text
-=================================================================
-  🤖 Jira Agent — Lecture et mise à jour automatique des tickets
-=================================================================
-
-📋 3 ticket(s) trouvé(s)
-
-SCRUM-5 → En cours avec succès
-SCRUM-6 → En cours avec succès
-SCRUM-7 → En cours avec succès
-
-Tickets modifiés avec succès : 3
-Tickets en échec            : 0
-```
-
 ---
 
 ## Semaine 3 — Code Generation Agent
@@ -224,46 +207,51 @@ GROQ_MODEL=llama-3.3-70b-versatile
 python code_agent.py
 ```
 
-### Résultat
+---
 
-Les fichiers générés sont publiés dans :
+## Semaine 4 — Orchestrator
 
-```text
-tickets/
-├── SCRUM-5/
-│   └── index.html
-├── SCRUM-6/
-│   └── index.html
-└── SCRUM-7/
-    └── index.html
+Le fichier `orchestrator.py` représente le cerveau du système Agentic SDLC.
+
+### Fonctionnalités
+
+- Surveiller Jira en continu
+- Effectuer un polling automatique toutes les X secondes
+- Détecter les tickets prêts à être traités
+- Déclencher automatiquement le Code Agent
+- Générer du code avec Groq/Llama
+- Publier le code généré sur GitHub
+- Ajouter un commentaire Jira
+- Déplacer les tickets vers `In Review`
+- Écrire les logs dans `orchestrator.log`
+- S'arrêter proprement avec `Ctrl+C`
+
+### Variable d'environnement
+
+```env
+POLL_INTERVAL_SECONDS=30
 ```
 
-### Exemple de résultat
+### Exécution
+
+```bash
+python orchestrator.py
+```
+
+### Workflow
 
 ```text
-=================================================================
-  🤖 Code Agent — Génération automatique de code
-=================================================================
-
-📋 3 ticket(s) trouvé(s)
-
-┌─ Ticket : SCRUM-5
-│  Titre  : Create a login page
-│  Desc   : Simple login form with email and password fields...
-└────────────────────────────────────────────────────────────
-   ⏳ Status → 'En cours'...
-   ✅ Status mis à jour
-   🤖 Génération du code avec Llama...
-   ✅ Code généré
-   📤 Upload sur GitHub → tickets/SCRUM-5/index.html
-   ✅ Fichier uploadé
-   💬 Commentaire ajouté dans Jira
-   ⏳ Status → 'In Review'...
-   ✅ Status mis à jour
-
-=================================================================
-  ✅ Code Agent terminé
-=================================================================
+orchestrator.py
+    ↓
+Poll Jira
+    ↓
+Ticket À faire détecté ?
+    ↓ oui
+code_agent.py
+    ↓
+Groq/Llama → GitHub → Jira
+    ↓
+Pause puis nouveau cycle
 ```
 
 ---
@@ -286,13 +274,6 @@ venv/
 __pycache__/
 *.pyc
 ```
-
-Si une clé API est exposée accidentellement, il faut immédiatement :
-
-1. Révoquer la clé exposée
-2. Générer une nouvelle clé
-3. Mettre à jour le fichier `.env`
-4. Vérifier que `.env` n'est pas suivi par Git
 
 ---
 
@@ -336,4 +317,3 @@ Si une clé API est exposée accidentellement, il faut immédiatement :
 
 Omar Naceur
 
-Projet réalisé dans le cadre d'un apprentissage pratique autour de l'automatisation SDLC, Jira, GitHub, Python et agents IA.
