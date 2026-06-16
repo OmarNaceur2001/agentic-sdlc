@@ -27,8 +27,7 @@
 </head>
 <body>
   <h1>Dashboard de salaire</h1>
-  <input type="text" id="recherche" placeholder="Rechercher un client...">
-  <button id="rechercher">Rechercher</button>
+  <input type="text" id="recherche" placeholder="Rechercher un client">
   <table id="tableau">
     <thead>
       <tr>
@@ -50,37 +49,47 @@
         <td>40000</td>
       </tr>
       <tr>
-        <td>Lucas Leroy</td>
+        <td>Thomas Leroy</td>
         <td>70000</td>
       </tr>
       <tr>
-        <td>Sophie Laurent</td>
+        <td>Sophie Garnier</td>
         <td>55000</td>
       </tr>
     </tbody>
   </table>
+  <button id="ajouter">Ajouter un client</button>
   <script>
     const recherche = document.getElementById('recherche');
-    const rechercher = document.getElementById('rechercher');
-    const tableau = document.getElementById('donnees');
-    let donnees = [
-      { nom: 'Jean Dupont', salaire: 50000 },
-      { nom: 'Pierre Durand', salaire: 60000 },
-      { nom: 'Marie Martin', salaire: 40000 },
-      { nom: 'Lucas Leroy', salaire: 70000 },
-      { nom: 'Sophie Laurent', salaire: 55000 }
-    ];
-    rechercher.addEventListener('click', () => {
-      const valeurRecherche = recherche.value.toLowerCase();
-      const lignes = tableau.getElementsByTagName('tr');
+    const tableau = document.getElementById('tableau');
+    const donnees = document.getElementById('donnees');
+    const ajouter = document.getElementById('ajouter');
+
+    recherche.addEventListener('input', function() {
+      const valeur = recherche.value.toLowerCase();
+      const lignes = donnees.getElementsByTagName('tr');
       for (let i = 0; i < lignes.length; i++) {
-        const ligne = lignes[i];
-        const nom = ligne.getElementsByTagName('td')[0].textContent.toLowerCase();
-        if (nom.indexOf(valeurRecherche) === -1) {
-          ligne.style.display = 'none';
+        const nom = lignes[i].getElementsByTagName('td')[0].textContent.toLowerCase();
+        if (nom.indexOf(valeur) === -1) {
+          lignes[i].style.display = 'none';
         } else {
-          ligne.style.display = '';
+          lignes[i].style.display = '';
         }
+      }
+    });
+
+    ajouter.addEventListener('click', function() {
+      const nom = prompt('Entrez le nom du client');
+      const salaire = prompt('Entrez le salaire du client');
+      if (nom && salaire) {
+        const ligne = document.createElement('tr');
+        const nomCell = document.createElement('td');
+        const salaireCell = document.createElement('td');
+        nomCell.textContent = nom;
+        salaireCell.textContent = salaire;
+        ligne.appendChild(nomCell);
+        ligne.appendChild(salaireCell);
+        donnees.appendChild(ligne);
       }
     });
   </script>
