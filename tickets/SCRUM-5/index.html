@@ -22,6 +22,7 @@
       margin-bottom: 20px;
       padding: 10px;
       border: 1px solid #ccc;
+      border-radius: 5px;
     }
     .login-form button {
       width: 100%;
@@ -42,19 +43,15 @@
   <div class="login-form">
     <h2>Login</h2>
     <form>
-      <input type="email" id="email" placeholder="Email">
-      <input type="password" id="password" placeholder="Password">
-      <button id="login-btn">Login</button>
+      <input type="email" placeholder="Email" id="email">
+      <input type="password" placeholder="Password" id="password">
+      <button type="submit">Login</button>
     </form>
-    <p>Don't have an account? <a href="#">Sign up</a></p>
+    <button type="button" onclick="register()">Register</button>
   </div>
   <script>
-    const loginBtn = document.getElementById('login-btn');
-    loginBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      console.log(`Email: ${email}, Password: ${password}`);
-    });
+    function register() {
+      alert("Registration is not available yet.");
+    }
   </script>
 </html>
