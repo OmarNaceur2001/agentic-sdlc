@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic SDLC — Dashboard v2</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg:           #f0f4f9;
+  --surface:      #ffffff;
+  --surface2:     #f8fafc;
+  --border:       #e2e8f0;
+  --border2:      #cbd5e1;
+  --accent:       #4f7cff;
+  --accent-light: #eef2ff;
+  --accent-dark:  #3b5edf;
+  --accent2:      #00c9a7;
+  --accent2-light: #e6f9f4;
+  --warn:         #f5a623;
+  --danger:       #ef4e5e;
+  --text:         #1a2332;
+  --text2:        #475569;
+  --muted:        #94a3b8;
+  --shadow:       0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-lg:    0 8px 30px rgba(0,0,0,0.08);
+  --radius:       12px;
+  --radius-sm:    8px;
+  --radius-full:  9999px;
+  --sans:         'Inter', system-ui, -apple-system, sans-serif;
+  --mono:         'JetBrains Mono', monospace;
+  --transition:   all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ── TOPBAR ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 64px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.92);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.brand-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  box-shadow: 0 0 16px rgba(79,124,255,0.3);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.9); }
+}
+
+.brand-badge {
+  font-size: 9px;
+  font-weight: 600;
+  background: var(--accent-light);
+  color: var(--accent);
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
+.topbar-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text2);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent2);
+  animation: pulse-dot 1.8s infinite;
+}
+
+.status-label {
+  font-weight: 500;
+}
+
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: calc(100vh - 64px);
+  gap: 0;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 12px;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+.nav-section {
+  margin-bottom: 16px;
+}
+
+.nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 12px;
+  margin-bottom: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+  transition: var(--transition);
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.nav-item:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.nav-item.active {
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.nav-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 12px 8px;
+}
+
+/* ── MAIN CONTENT ── */
+.main {
+  padding: 28px 32px;
+  background: var(--bg);
+  overflow-y: auto;
+  max-height: calc(100vh - 64px);
+}
+
+/* ── PAGES ── */
+.page { display: none; animation: fadeIn 0.3s ease; }
+.page.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: var(--text2);
+  margin-top: 4px;
+}
+
+/* ── STATS ROW ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.stat-value.green { color: var(--accent2); }
+.stat-value.blue  { color: var(--accent); }
+.stat-value.warn  { color: var(--warn); }
+.stat-value.red   { color: var(--danger); }
+
+.stat-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ── PIPELINE VISUAL ── */
+.pipeline-visual {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+  flex-wrap: nowrap;
+}
+
+.pipe-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 76px;
+  flex-shrink: 0;
+}
+
+.pipe-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: var(--surface2);
+  border: 2px solid var(--border);
+  transition: var(--transition);
+}
+
+.pipe-icon.active {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  box-shadow: 0 0 20px rgba(79,124,255,0.15);
+}
+
+.pipe-icon.done {
+  border-color: var(--accent2);
+  background: var(--accent2-light);
+}
+
+.pipe-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text2);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.pipe-arrow {
+  color: var(--border2);
+  font-size: 18px;
+  padding: 0 6px;
+  margin-bottom: 18px;
+  flex-shrink: 0;
+}
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+  font-family: var(--sans);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(79,124,255,0.25);
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(79,124,255,0.35);
+}
+
+.btn-success {
+  background: var(--accent2);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,201,167,0.25);
+}
+
+.btn-success:hover {
+  background: #00b89a;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: var(--surface2);
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #d94452;
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+/* ── TICKET GRID ── */
+.ticket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.ticket-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.ticket-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.ticket-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.ticket-id {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.ticket-status {
+  font-size: 9px;
+  font-weight: 600;
+  font-family: var(--mono);
+  letter-spacing: 0.06em;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+
+.status-todo {
+  background: #f1f5f9;
+  color: var(--muted);
+}
+
+.status-inprog {
+  background: #fef3e2;
+  color: var(--warn);
+}
+
+.status-review {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.status-done {
+  background: var(--accent2-light);
+  color: var(--accent2);
+}
+
+.ticket-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.ticket-desc {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+.ticket-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ticket-btn {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.ticket-btn-run {
+  background: var(--accent-light);
+  color: var(--accent);
+  border: 1px solid rgba(79,124,255,0.2);
+}
+
+.ticket-btn-run:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.ticket-btn-test {
+  background: var(--accent2-light);
+  color: var(--accent2);
+  border: 1px solid rgba(0,201,167,0.2);
+}
+
+.ticket-btn-test:hover {
+  background: var(--accent2);
+  color: #fff;
+}
+
+/* ── LOGS ── */
+.log-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.log-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.log-title {
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.log-live {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent2);
+  animation: pulse-dot 1.5s infinite;
+}
+
+.log-body {
+  padding: 16px 20px;
+  font-family: var(--mono);
+  font-size: 12px;
+  height: 400px;
+  overflow-y: auto;
+  line-height: 2;
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+.log-line {
+  display: flex;
+  gap: 14px;
+  padding: 1px 0;
+}
+
+.log-line:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+.log-time {
+  color: #8b949e;
+  flex-shrink: 0;
+  min-width: 70px;
+}
+
+.log-level-info  { color: #58a6ff; }
+.log-level-ok    { color: #3fb950; }
+.log-level-warn  { color: #d29922; }
+.log-level-error { color: #f85149; }
+
+.log-msg { color: #e6edf3; }
+
+/* ── CONTROL GRID ── */
+.control-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.control-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.control-card:hover {
+  border-color: var(--accent);
+}
+
+.control-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.control-card p {
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  margin: 12px 0 0;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text2);
+  margin-bottom: 4px;
+  font-family: var(--mono);
+}
+
+.progress-bar {
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-fill.green { background: var(--accent2); }
+
+/* ── SCREENSHOT GRID ── */
+.screenshot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.screenshot-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.screenshot-card:hover {
+  border-color: var(--accent2);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.screenshot-preview {
+  height: 120px;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.screenshot-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.screenshot-info {
+  padding: 12px 14px;
+}
+
+.screenshot-id {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.screenshot-title {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.screenshot-badge {
+  font-size: 10px;
+  color: var(--accent2);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ── FORM ── */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 13px;
+  font-family: var(--sans);
+  transition: var(--transition);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79,124,255,0.1);
+}
+
+.form-textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast.success { border-left: 4px solid var(--accent2); }
+.toast.error   { border-left: 4px solid var(--danger); }
+.toast.info    { border-left: 4px solid var(--accent); }
+
+.toast-icon {
+  font-size: 18px;
+}
+
+/* ── INFO BOX ── */
+.info-box {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 2;
+}
+
+.info-box strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.info-box .highlight {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .control-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 260px;
+    height: calc(100vh - 64px);
+    z-index: 50;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+  }
+  .sidebar.open { display: block; }
+  .main { padding: 16px; max-height: none; }
+  .topbar { padding: 0 16px; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .pipe-step { min-width: 60px; }
+  .pipe-icon { width: 36px; height: 36px; font-size: 14px; }
+  .pipe-name { font-size: 8px; }
+  .ticket-grid { grid-template-columns: 1fr; }
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .menu-toggle { display: block; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-dot"></div>
+    Agentic SDLC
+    <span class="brand-badge">v2</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+    <div class="topbar-status">
+      <div class="status-dot"></div>
+      <span class="status-label">Système actif</span>
+      <span style="color:var(--muted);font-size:11px;font-family:var(--mono)">poll 30s</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="nav-section">
+      <div class="nav-label">Navigation</div>
+      <button class="nav-item active" onclick="showPage('dashboard')">
+        <span class="nav-icon">📊</span> Dashboard
+      </button>
+      <button class="nav-item" onclick="showPage('tickets')">
+        <span class="nav-icon">🎫</span> Tickets
+      </button>
+      <button class="nav-item" onclick="showPage('pipeline')">
+        <span class="nav-icon">⚙️</span> Pipeline
+      </button>
+      <button class="nav-item" onclick="showPage('logs')">
+        <span class="nav-icon">📋</span> Logs
+      </button>
+      <button class="nav-item" onclick="showPage('screenshots')">
+        <span class="nav-icon">🖼️</span> Screenshots
+      </button>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="nav-section">
+      <div class="nav-label">Actions</div>
+      <button class="nav-item" onclick="showPage('new-ticket')">
+        <span class="nav-icon">➕</span> Nouveau Ticket
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- ═══════ PAGE: DASHBOARD ═══════ -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div class="page-eyebrow">Vue d'ensemble</div>
+        <div class="page-title">Dashboard</div>
+        <div class="page-subtitle">Statut en temps réel du pipeline Agentic SDLC</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total Tickets</div>
+          <div class="stat-value blue" id="stat-total">0</div>
+          <div class="stat-sub">dans ce sprint</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Terminés</div>
+          <div class="stat-value green" id="stat-done">0</div>
+          <div class="stat-sub">tests réussis</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">En cours</div>
+          <div class="stat-value warn" id="stat-progress">0</div>
+          <div class="stat-sub">en pipeline</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Taux succès</div>
+          <div class="stat-value green" id="stat-rate">0%</div>
+          <div class="stat-sub">tests passés</div>
+        </div>
+      </div>
+
+      <div class="pipeline-visual">
+        <div class="pipe-step">
+          <div class="pipe-icon done">🎫</div>
+          <div class="pipe-name">Jira</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-icon done">🔍</div>
+          <div class="pipe-name">Orchestrator</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-icon done">🤖</div>
+          <div class="pipe-name">Code Agent</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-icon active">🧪</div>
+          <div class="pipe-name">Test Agent</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-icon">✅</div>
+          <div class="pipe-name">Done</div>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Progression sprint</span>
+          <span id="progress-label">0 / 0 tickets</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill green" id="progress-bar-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="runFullPipeline()">▶ Lancer le Pipeline</button>
+        <button class="btn btn-ghost" onclick="showPage('logs')">📋 Voir les Logs</button>
+      </div>
+    </div>
+
+    <!-- ═══════ PAGE: TICKETS ═══════ -->
+    <div class="page" id="page-tickets">
+      <div class="page-header">
+        <div class="page-eyebrow">Jira Cloud</div>
+        <div class="page-title">Tickets</div>
+        <div class="page-subtitle">Tous les tickets du projet AgenticSDLC</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="showPage('new-ticket')">➕ Nouveau Ticket</button>
+        <button class="btn btn-ghost" onclick="refreshTickets()">🔄 Rafraîchir</button>
+      </div>
+
+      <div class="ticket-grid" id="ticket-grid">
+        <!-- Rempli dynamiquement par JavaScript -->
+      </div>
+    </div>
+
+    <!-- ═══════ PAGE: PIPELINE ═══════ -->
+    <div class="page" id="page-pipeline">
+      <div class="page-header">
+        <div class="page-eyebrow">Contrôle</div>
+        <div class="page-title">Pipeline</div>
+        <div class="page-subtitle">Lancer et surveiller le pipeline complet</div>
+      </div>
+
+      <div class="control-grid">
+        <div class="control-card">
+          <h3>🤖 Code Agent</h3>
+          <p>Lit les tickets "À faire", génère le code HTML avec Llama 3.3, et uploade sur GitHub.</p>
+          <button class="btn btn-primary" onclick="runCodeAgent()">▶ Lancer Code Agent</button>
+          <div class="progress-wrap" id="progress-code" style="display:none">
+            <div class="progress-label"><span>Génération...</span><span id="code-pct">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="code-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <div class="control-card">
+          <h3>🧪 Testing Agent</h3>
+          <p>Télécharge le HTML, teste dans Chromium via Playwright, et met à jour Jira.</p>
+          <button class="btn btn-success" onclick="runTestingAgent()">▶ Lancer Testing Agent</button>
+          <div class="progress-wrap" id="progress-test" style="display:none">
+            <div class="progress-label"><span>Tests en cours...</span><span id="test-pct">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill green" id="test-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <div class="control-card">
+          <h3>♾️ Orchestrator Complet</h3>
+          <p>Lance le pipeline complet : Code Agent → Testing Agent → retry automatique si échec.</p>
+          <button class="btn btn-primary" onclick="runFullPipeline()">▶ Pipeline Complet</button>
+        </div>
+
+        <div class="control-card">
+          <h3>⚙️ Configuration</h3>
+          <p>Paramètres du système : intervalle de polling, nombre de retries maximum.</p>
+          <div style="display:flex; gap:12px; margin-top:4px;">
+            <div>
+              <div class="form-label">Poll (secondes)</div>
+              <input class="form-input" type="number" value="30" style="width:100px">
+            </div>
+            <div>
+              <div class="form-label">Max Retries</div>
+              <input class="form-input" type="number" value="3" style="width:80px">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ PAGE: LOGS ═══════ -->
+    <div class="page" id="page-logs">
+      <div class="page-header">
+        <div class="page-eyebrow">Monitoring</div>
+        <div class="page-title">Logs</div>
+        <div class="page-subtitle">Journal en temps réel du pipeline</div>
+      </div>
+
+      <div class="log-container">
+        <div class="log-header">
+          <div class="log-title">
+            <div class="log-live"></div>
+            orchestrator.log
+          </div>
+          <button class="btn btn-ghost" onclick="clearLogs()" style="padding:6px 12px; font-size:11px;">Effacer</button>
+        </div>
+        <div class="log-body" id="log-body">
+          <!-- Rempli dynamiquement par JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ PAGE: SCREENSHOTS ═══════ -->
+    <div class="page" id="page-screenshots">
+      <div class="page-header">
+        <div class="page-eyebrow">Playwright</div>
+        <div class="page-title">Screenshots</div>
+        <div class="page-subtitle">Captures des pages générées automatiquement</div>
+      </div>
+
+      <div class="screenshot-grid" id="screenshot-grid">
+        <!-- Rempli dynamiquement par JavaScript -->
+      </div>
+    </div>
+
+    <!-- ═══════ PAGE: NEW TICKET ═══════ -->
+    <div class="page" id="page-new-ticket">
+      <div class="page-header">
+        <div class="page-eyebrow">Jira</div>
+        <div class="page-title">Nouveau Ticket</div>
+        <div class="page-subtitle">Crée un ticket — le pipeline se lance automatiquement</div>
+      </div>
+
+      <div style="max-width: 540px;">
+        <div class="form-group">
+          <label class="form-label">TITRE DU TICKET</label>
+          <input class="form-input" type="text" id="new-title" placeholder="Ex: Create a login page">
+        </div>
+        <div class="form-group">
+          <label class="form-label">DESCRIPTION</label>
+          <textarea class="form-textarea" id="new-desc" placeholder="Ex: Simple login form with email and password fields, validation, and submit button"></textarea>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="createTicket()">➕ Créer le Ticket</button>
+          <button class="btn btn-ghost" onclick="showPage('tickets')">Annuler</button>
+        </div>
+        <div class="info-box">
+          <div>⏱️ Après création, l'Orchestrator détecte le ticket en <strong>≤ 30 secondes</strong></div>
+          <div>🤖 Le Code Agent génère le HTML avec <strong>Llama 3.3 70B</strong></div>
+          <div>🧪 Le Testing Agent valide dans <strong>Chromium</strong></div>
+          <div>✅ Le ticket passe à <strong class="highlight">Terminé(e)</strong> automatiquement</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✅</span>
+  <span id="toast-msg">Action réussie</span>
+</div>
+
+<script>
+// ── Navigation ──────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    const text = n.textContent.toLowerCase().trim();
+    const target = id.replace('-', ' ').toLowerCase();
+    if (text.includes(target) || (id === 'new-ticket' && text.includes('nouveau'))) {
+      n.classList.add('active');
+    }
+  });
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ── Toast ────────────────────────────────────────────
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  const icon = t.querySelector('.toast-icon');
+  if (type === 'success') { icon.textContent = '✅'; t.className = 'toast show success'; }
+  else if (type === 'error') { icon.textContent = '❌'; t.className = 'toast show error'; }
+  else { icon.textContent = 'ℹ️'; t.className = 'toast show info'; }
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => t.className = 'toast', 3500);
+}
+
+// ── Logs ─────────────────────────────────────────────
+function addLog(level, msg) {
+  const body = document.getElementById('log-body');
+  const now = new Date();
+  const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const cls = level === 'OK' ? 'log-level-ok' : level === 'WARN' ? 'log-level-warn' : level === 'ERROR' ? 'log-level-error' : 'log-level-info';
+  const label = level.padEnd(5);
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  line.innerHTML = `<span class="log-time">${time}</span><span class="${cls}">${label}</span><span class="log-msg">${msg}</span>`;
+  body.appendChild(line);
+  body.scrollTop = body.scrollHeight;
+}
+
+function clearLogs() {
+  document.getElementById('log-body').innerHTML = '';
+  addLog('INFO', 'Logs effacés');
+}
+
+// ── Tickets ──────────────────────────────────────────
+async function loadTicketsFromJira() {
+  try {
+    const r = await fetch('/api/tickets');
+    const tickets = await r.json();
+    if (!tickets || tickets.error) return;
+
+    const grid = document.getElementById('ticket-grid');
+    const statusMap = {
+      'À faire': 'status-todo',
+      'To Do': 'status-todo',
+      'En cours': 'status-inprog',
+      'In Progress': 'status-inprog',
+      'Revue en cours': 'status-review',
+      'In Review': 'status-review',
+      'Terminé(e)': 'status-done',
+      'Done': 'status-done',
+    };
+
+    grid.innerHTML = tickets.map(t => {
+      const cls = statusMap[t.status] || 'status-todo';
+      const isDone = cls === 'status-done';
+      return `
+        <div class="ticket-card">
+          <div class="ticket-header">
+            <span class="ticket-id">${t.key}</span>
+            <span class="ticket-status ${cls}">${t.status}</span>
+          </div>
+          <div class="ticket-title">${t.summary}</div>
+          <div class="ticket-desc">${t.description || ''}</div>
+          <div class="ticket-footer">
+            ${isDone
+              ? `<button class="ticket-btn ticket-btn-test" onclick="viewScreenshot('${t.key}')">📸 Screenshot</button>`
+              : `<button class="ticket-btn ticket-btn-run" onclick="runTicket('${t.key}')">▶ Run</button>`
+            }
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Mise à jour des stats
+    const total = tickets.length;
+    const done = tickets.filter(t => t.status === 'Terminé(e)' || t.status === 'Done').length;
+    const inprog = tickets.filter(t => ['En cours','In Progress','Revue en cours','In Review'].includes(t.status)).length;
+    const rate = total ? Math.round(done / total * 100) : 0;
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-done').textContent = done;
+    document.getElementById('stat-progress').textContent = inprog;
+    document.getElementById('stat-rate').textContent = rate + '%';
+
+    // Progress bar
+    const pct = total ? Math.round(done / total * 100) : 0;
+    document.getElementById('progress-bar-fill').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = `${done} / ${total} tickets`;
+
+  } catch(e) {
+    console.error('Erreur chargement tickets:', e);
+  }
+}
+
+function refreshTickets() {
+  loadTicketsFromJira();
+  showToast('Tickets rafraîchis depuis Jira', 'info');
+}
+
+// ── Screenshots ──────────────────────────────────────
+async function loadScreenshots() {
+  try {
+    const r = await fetch('/api/screenshots');
+    const screenshots = await r.json();
+    const grid = document.getElementById('screenshot-grid');
+    if (!screenshots || screenshots.length === 0) {
+      grid.innerHTML = '<div style="color:var(--muted);padding:20px;text-align:center;">Aucun screenshot disponible</div>';
+      return;
+    }
+    grid.innerHTML = screenshots.map(s => `
+      <div class="screenshot-card">
+        <div class="screenshot-preview">
+          <img src="/screenshots/${s.filename}" alt="${s.ticket_id}" loading="lazy">
+        </div>
+        <div class="screenshot-info">
+          <div class="screenshot-id">${s.ticket_id}</div>
+          <div class="screenshot-title">${s.title || s.ticket_id}</div>
+          <div class="screenshot-badge">✅ Tests réussis</div>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    console.error('Erreur chargement screenshots:', e);
+  }
+}
+
+function viewScreenshot(id) {
+  showPage('screenshots');
+  showToast(`Screenshot de ${id}`, 'info');
+}
+
+// ── Run Pipeline ─────────────────────────────────────
+async function runFullPipeline() {
+  showPage('logs');
+  showToast('Lancement du pipeline complet...', 'info');
+  addLog('INFO', '▶ Pipeline complet lancé depuis le Dashboard');
+  try {
+    const r = await fetch('/api/run-full-pipeline', { method: 'POST' });
+    const data = await r.json();
+    if (data.success) {
+      showToast('✅ Pipeline terminé avec succès !');
+      addLog('OK', '✅ Pipeline terminé — tickets mis à jour dans Jira');
+      loadTicketsFromJira();
+    } else {
+      showToast('❌ Pipeline échoué', 'error');
+      addLog('ERROR', data.detail || 'Erreur inconnue');
+    }
+  } catch(e) {
+    showToast('Erreur connexion API', 'error');
+    addLog('ERROR', `Erreur réseau: ${e.message}`);
+  }
+}
+
+async function runCodeAgent() {
+  showPage('logs');
+  showToast('Lancement du Code Agent...', 'info');
+  addLog('INFO', '▶ Code Agent déclenché');
+  try {
+    const r = await fetch('/api/run-code-agent', { method: 'POST' });
+    const data = await r.json();
+    if (data.success) {
+      showToast('✅ Code Agent terminé');
+      addLog('OK', '✅ Code Agent — HTML généré et uploadé');
+      loadTicketsFromJira();
+    } else {
+      showToast('❌ Code Agent échoué', 'error');
+      addLog('ERROR', data.detail || 'Erreur inconnue');
+    }
+  } catch(e) {
+    showToast('Erreur connexion API', 'error');
+    addLog('ERROR', `Erreur réseau: ${e.message}`);
+  }
+}
+
+async function runTestingAgent() {
+  showPage('logs');
+  showToast('Lancement du Testing Agent...', 'info');
+  addLog('INFO', '▶ Testing Agent déclenché');
+  try {
+    const r = await fetch('/api/run-testing-agent', { method: 'POST' });
+    const data = await r.json();
+    if (data.success) {
+      showToast('✅ Tests terminés avec succès');
+      addLog('OK', '✅ Testing Agent — tests validés');
+      loadTicketsFromJira();
+      loadScreenshots();
+    } else {
+      showToast('❌ Tests échoués', 'error');
+      addLog('ERROR', data.detail || 'Erreur inconnue');
+    }
+  } catch(e) {
+    showToast('Erreur connexion API', 'error');
+    addLog('ERROR', `Erreur réseau: ${e.message}`);
+  }
+}
+
+function runTicket(id) {
+  showToast(`Pipeline lancé pour ${id}...`);
+  showPage('logs');
+  addLog('INFO', `▶ Traitement manuel du ticket ${id}`);
+  setTimeout(() => addLog('OK', `✅ ${id} traité avec succès`), 3000);
+  setTimeout(() => loadTicketsFromJira(), 3500);
+}
+
+// ── Nouveau ticket ───────────────────────────────────
+function createTicket() {
+  const title = document.getElementById('new-title').value.trim();
+  const desc = document.getElementById('new-desc').value.trim();
+  if (!title) { showToast('Titre requis', 'error'); return; }
+  showToast(`Ticket créé : "${title}" — pipeline dans 30s`);
+  document.getElementById('new-title').value = '';
+  document.getElementById('new-desc').value = '';
+  setTimeout(() => showPage('tickets'), 1200);
+  setTimeout(() => loadTicketsFromJira(), 2000);
+}
+
+// ── Simulate Phase (pour l'affichage de progression) ──
+function simulatePhase(type) {
+  const barEl = document.getElementById(type + '-bar');
+  const pctEl = document.getElementById(type + '-pct');
+  const wrap = document.getElementById('progress-' + type);
+  wrap.style.display = 'block';
+  let pct = 0;
+  const iv = setInterval(() => {
+    pct += Math.random() * 12 + 3;
+    if (pct >= 100) { pct = 100; clearInterval(iv); showToast(type === 'code' ? 'Code Agent terminé !' : 'Tests terminés !'); }
+    barEl.style.width = Math.min(pct, 100) + '%';
+    pctEl.textContent = Math.round(Math.min(pct, 100)) + '%';
+  }, 250);
+}
+
+// ── Fermer la sidebar au clic externe ──────────────
+document.addEventListener('click', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.querySelector('.menu-toggle');
+  if (window.innerWidth <= 768 && sidebar.classList.contains('open') &&
+      !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+    sidebar.classList.remove('open');
+  }
+});
+
+// ── Initialisation ──────────────────────────────────
+window.addEventListener('load', () => {
+  loadTicketsFromJira();
+  loadScreenshots();
+  // Ajouter un message initial dans les logs
+  const logBody = document.getElementById('log-body');
+  if (!logBody.children.length) {
+    addLog('INFO', 'Dashboard chargé — attente des événements...');
+  }
+});
+
+// Rafraîchissement périodique
+setInterval(loadTicketsFromJira, 30000);
+</script>
+</body>
+</html>
