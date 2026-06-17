@@ -6,3 +6,4 @@ playwright
 fastapi
 uvicorn
 jinja2
+streamlit
