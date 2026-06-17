@@ -92,27 +92,29 @@ Testing Agent (Playwright)
 
 ## 📁 Structure du projet
 
-```
+```text
 agentic-sdlc/
-├── orchestrator.py      # Cerveau du système — boucle principale
-├── code_agent.py        # Génération HTML via Llama + upload GitHub
-├── testing_agent.py     # Validation Playwright + mise à jour Jira
-├── jira_agent.py        # Utilitaires Jira (transitions, commentaires)
-├── test_connections.py  # Vérification initiale des APIs
-├── requirements.txt     # Dépendances Python
-├── .env.example         # Template de configuration
-├── .gitignore           # Exclusions Git
-├── tickets/             # Code généré par ticket
+├── orchestrator.py          # Cerveau du système — pipeline complet
+├── code_agent.py            # Génération HTML via Llama + upload GitHub
+├── testing_agent.py         # Validation Playwright + mise à jour Jira
+├── jira_agent.py            # Utilitaires Jira
+├── dashboard_app.py         # Backend FastAPI du dashboard web
+├── test_connections.py      # Vérification initiale des APIs
+├── requirements.txt         # Dépendances Python
+├── .env.example             # Template de configuration
+├── .gitignore               # Exclusions Git
+├── templates/
+│   └── dashboard.html       # Interface web du dashboard
+├── static/                  # Fichiers statiques éventuels
+├── tickets/                 # Code généré par ticket
 │   ├── SCRUM-5/
 │   │   └── index.html
 │   ├── SCRUM-6/
 │   │   └── index.html
 │   └── ...
-└── screenshots/         # Screenshots Playwright par ticket
+└── screenshots/             # Screenshots Playwright générés localement
     ├── SCRUM-5.png
     └── ...
-```
-
 ---
 
 ## 🚀 Installation
@@ -244,9 +246,13 @@ Commentaire : Tests automatiques réussis + rapport complet
 - [x] Code Agent — génération HTML avec Llama 3.3
 - [x] Testing Agent — validation Playwright
 - [x] Orchestrator — pipeline complet avec retry
+- [x] Dashboard Web — interface locale FastAPI
+- [ ] Dashboard temps réel — WebSocket live logs
+- [ ] Création dynamique de tickets Jira depuis le dashboard
+- [ ] Affichage dynamique des tickets depuis Jira API
+- [ ] Affichage réel des screenshots Playwright
 - [ ] Deploy Agent — GitHub Pages automatique
 - [ ] Multi-Agent — Developer + Tester + DevOps Agent
-- [ ] Dashboard — interface de monitoring en temps réel
 
 ---
 
