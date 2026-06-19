@@ -1,0 +1,67 @@
+[1mdiff --git a/README.md b/README.md[m
+[1mindex 746329b..af66b6b 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -240,6 +240,46 @@[m [mCommentaire : Tests automatiques réussis + rapport complet[m
+ [m
+ ---[m
+ [m
+[32m+[m[32m## 📡 Dashboard temps réel — WebSocket Live Logs[m
+[32m+[m
+[32m+[m[32mLe Dashboard FastAPI intègre désormais un système de journaux en temps réel basé sur WebSocket.[m
+[32m+[m
+[32m+[m[32m### Fonctionnalités[m
+[32m+[m
+[32m+[m[32m- Streaming live des logs depuis le backend vers le navigateur[m
+[32m+[m[32m- Exécution du Code Agent depuis le Dashboard[m
+[32m+[m[32m- Exécution du Testing Agent depuis le Dashboard[m
+[32m+[m[32m- Exécution du pipeline complet depuis le Dashboard[m
+[32m+[m[32m- Affichage progressif des logs dans la page `Logs`[m
+[32m+[m[32m- Connexion directe entre l’interface web et les scripts Python[m
+[32m+[m
+[32m+[m[32m### Endpoints WebSocket[m
+[32m+[m
+[32m+[m[32m```text[m
+[32m+[m[32m/ws/code-agent[m
+[32m+[m[32m/ws/testing-agent[m
+[32m+[m[32m/ws/full-pipeline[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m### Fonctionnement[m
+[32m+[m
+[32m+[m[32m```text[m
+[32m+[m[32mDashboard Web[m
+[32m+[m[32m    ↓ WebSocket[m
+[32m+[m[32mFastAPI Backend[m
+[32m+[m[32m    ↓ subprocess[m
+[32m+[m[32mCode Agent / Testing Agent[m
+[32m+[m[32m    ↓ stdout ligne par ligne[m
+[32m+[m[32mPage Logs du Dashboard[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m### Résultat[m
+[32m+[m
+[32m+[m[32mLe point `Dashboard temps réel — WebSocket live logs` est maintenant implémenté.[m
+[32m+[m[32mLe dashboard ne se limite plus à lancer les scripts en mode synchrone : il peut afficher les journaux d’exécution en direct pendant le traitement.[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+ ## 🗺️ Roadmap[m
+ [m
+ - [x] Jira Agent — lecture et mise à jour des tickets[m
+[36m@@ -247,13 +287,14 @@[m [mCommentaire : Tests automatiques réussis + rapport complet[m
+ - [x] Testing Agent — validation Playwright[m
+ - [x] Orchestrator — pipeline complet avec retry[m
+ - [x] Dashboard Web — interface locale FastAPI[m
+[31m-- [ ] Dashboard temps réel — WebSocket live logs[m
+[32m+[m[32m- [x] Dashboard temps réel — WebSocket live logs[m
+ - [ ] Création dynamique de tickets Jira depuis le dashboard[m
+ - [ ] Affichage dynamique des tickets depuis Jira API[m
+ - [ ] Affichage réel des screenshots Playwright[m
+ - [ ] Deploy Agent — GitHub Pages automatique[m
+ - [ ] Multi-Agent — Developer + Tester + DevOps Agent[m
+ [m
+[32m+[m
+ ---[m
+ [m
+ ## 👨‍💻 Auteur[m

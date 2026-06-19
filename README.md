@@ -240,6 +240,46 @@ Commentaire : Tests automatiques réussis + rapport complet
 
 ---
 
+## 📡 Dashboard temps réel — WebSocket Live Logs
+
+Le Dashboard FastAPI intègre désormais un système de journaux en temps réel basé sur WebSocket.
+
+### Fonctionnalités
+
+- Streaming live des logs depuis le backend vers le navigateur
+- Exécution du Code Agent depuis le Dashboard
+- Exécution du Testing Agent depuis le Dashboard
+- Exécution du pipeline complet depuis le Dashboard
+- Affichage progressif des logs dans la page `Logs`
+- Connexion directe entre l’interface web et les scripts Python
+
+### Endpoints WebSocket
+
+```text
+/ws/code-agent
+/ws/testing-agent
+/ws/full-pipeline
+```
+
+### Fonctionnement
+
+```text
+Dashboard Web
+    ↓ WebSocket
+FastAPI Backend
+    ↓ subprocess
+Code Agent / Testing Agent
+    ↓ stdout ligne par ligne
+Page Logs du Dashboard
+```
+
+### Résultat
+
+Le point `Dashboard temps réel — WebSocket live logs` est maintenant implémenté.
+Le dashboard ne se limite plus à lancer les scripts en mode synchrone : il peut afficher les journaux d’exécution en direct pendant le traitement.
+
+---
+
 ## 🗺️ Roadmap
 
 - [x] Jira Agent — lecture et mise à jour des tickets
@@ -247,12 +287,13 @@ Commentaire : Tests automatiques réussis + rapport complet
 - [x] Testing Agent — validation Playwright
 - [x] Orchestrator — pipeline complet avec retry
 - [x] Dashboard Web — interface locale FastAPI
-- [ ] Dashboard temps réel — WebSocket live logs
+- [x] Dashboard temps réel — WebSocket live logs
 - [ ] Création dynamique de tickets Jira depuis le dashboard
 - [ ] Affichage dynamique des tickets depuis Jira API
 - [ ] Affichage réel des screenshots Playwright
 - [ ] Deploy Agent — GitHub Pages automatique
 - [ ] Multi-Agent — Developer + Tester + DevOps Agent
+
 
 ---
 
