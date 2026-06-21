@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Météo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: linear-gradient(to bottom, #87ceeb, #4682b4);
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .weather-card {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .weather-icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="weather-card">
+    <h2>Ville : Paris</h2>
+    <p>Température : 22°C</p>
+    <p>Humidité : 60%</p>
+    <span class="weather-icon">☀</span>
+    <button onclick="updateWeather()">Mettre à jour</button>
+  </div>
+  <script>
+    function updateWeather() {
+      // Exemple de mise à jour des données
+      document.querySelector('h2').textContent = 'Ville : Lyon';
+      document.querySelector('p:nth-child(2)').textContent = 'Température : 25°C';
+      document.querySelector('p:nth-child(3)').textContent = 'Humidité : 50%';
+      document.querySelector('.weather-icon').textContent = '☁';
+    }
+  </script>
+</html>
