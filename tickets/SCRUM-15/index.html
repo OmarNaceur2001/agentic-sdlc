@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard de gestion de tâches</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+    .search-bar {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+    }
+    .dark-mode {
+      background-color: #333;
+      color: #fff;
+    }
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .task {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+    .task:last-child {
+      border-bottom: none;
+    }
+    .task-name {
+      font-weight: bold;
+    }
+    .task-description {
+      font-size: 14px;
+      color: #666;
+    }
+    .task-priority {
+      font-size: 14px;
+      color: #666;
+    }
+    .task-status {
+      font-size: 14px;
+      color: #666;
+    }
+    .task-due-date {
+      font-size: 14px;
+      color: #666;
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .button {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #444;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #ccc;
+      border-radius: 5px;
+    }
+    .progress-bar-fill {
+      background-color: #333;
+      height: 10px;
+      border-radius: 5px;
+      animation: progress 2s linear infinite;
+    }
+    @keyframes progress {
+      0% {
+        width: 0;
+      }
+      100% {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Dashboard de gestion de tâches</h1>
+      <input type="search" id="search-bar" class="search-bar" placeholder="Rechercher...">
+      <button id="dark-mode" class="button">Dark Mode</button>
+    </div>
+    <div class="task-list">
+      <div class="task">
+        <h2 class="task-name">Tâche 1</h2>
+        <p class="task-description">Description de la tâche 1</p>
+        <p class="task-priority">Priorité : Haute</p>
+        <p class="task-status">Statut : En cours</p>
+        <p class="task-due-date">Date limite : 2024-03-16</p>
+        <img src="https://via.placeholder.com/40" class="avatar">
+        <button class="button">Modifier</button>
+        <button class="button">Supprimer</button>
+        <button class="button">Voir détails</button>
+      </div>
+      <div class="task">
+        <h2 class="task-name">Tâche 2</h2>
+        <p class="task-description">Description de la tâche 2</p>
+        <p class="task-priority">Priorité : Moyenne</p>
+        <p class="task-status">Statut : Terminée</p>
+        <p class="task-due-date">Date limite : 2024-03-17</p>
+        <img src="https://via.placeholder.com/40" class="avatar">
+        <button class="button">Modifier</button>
+        <button class="button">Supprimer</button>
+        <button class="button">Voir détails</button>
+      </div>
+      <div class="task">
+        <h2 class="task-name">Tâche 3</h2>
+        <p class="task-description">Description de la tâche 3</p>
+        <p class="task-priority">Priorité : Basse</p>
+        <p class="task-status">Statut : En cours</p>
+        <p class="task-due-date">Date limite : 2024-03-18</p>
+        <img src="https://via.placeholder.com/40" class="avatar">
+        <button class="button">Modifier</button>
+        <button class="button">Supprimer</button>
+        <button class="button">Voir détails</button>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill"></div>
+    </div>
+    <p>Nombre total de tâches : 3</p>
+    <p>Tâches terminées : 1</p>
+    <p>Tâches en cours : 2</p>
+    <p>Tâches bloquées : 0</p>
+  </div>
+  <script>
+    const searchBar = document.getElementById('search-bar');
+    const darkModeButton = document.getElementById('dark-mode');
+    const tasks = document.querySelectorAll('.task');
+    const progressBar = document.querySelector('.progress-bar-fill');
+    
+    searchBar.addEventListener('input', () => {
+      const searchValue = searchBar.value.toLowerCase();
+      tasks.forEach(task => {
+        const taskName = task.querySelector('.task-name').textContent.toLowerCase();
+        const taskDescription = task.querySelector('.task-description').textContent.toLowerCase();
+        if (taskName.includes(searchValue) || taskDescription.includes(searchValue)) {
+          task.style.display = 'block';
+        } else {
+          task.style.display = 'none';
+        }
+      });
+    });
+    
+    darkModeButton.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+    
+    progressBar.style.width = '50%';
+  </script>
+</html>
