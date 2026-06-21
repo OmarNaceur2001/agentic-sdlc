@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Paramètres</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .dark-mode {
+      background-color: #333;
+      color: #fff;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Paramètres</h2>
+    <label>
+      <input type="checkbox" id="dark-mode" />
+      Activer le mode sombre
+    </label>
+    <button id="save-button">Enregistrer</button>
+  </div>
+  <script>
+    const darkModeCheckbox = document.getElementById('dark-mode');
+    const saveButton = document.getElementById('save-button');
+    const body = document.body;
+
+    darkModeCheckbox.addEventListener('change', () => {
+      if (darkModeCheckbox.checked) {
+        body.classList.add('dark-mode');
+      } else {
+        body.classList.remove('dark-mode');
+      }
+    });
+
+    saveButton.addEventListener('click', () => {
+      alert('Paramètres enregistrés');
+    });
+  </script>
+</html>
