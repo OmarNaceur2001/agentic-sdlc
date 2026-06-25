@@ -297,6 +297,20 @@ Le dashboard ne se limite plus à lancer les scripts en mode synchrone : il peut
 
 ---
 
+## 🧠 Roadmap ML — Self-Improving Pipeline
+
+- [x] Data Logger — historique SQLite des runs pipeline
+- [x] API endpoints — /api/pipeline-runs + stats
+- [x] Feature Extractor — extraction ML features du code généré
+- [x] Intégration Feature Extractor dans Testing Agent
+- [ ] Code Quality Scorer — score rule-based v1
+- [ ] Dataset réel — minimum 50 runs pipeline
+- [ ] Random Forest Code Quality Model
+- [ ] Prompt Optimizer — amélioration automatique des prompts
+- [ ] Analytics Dashboard — ML insights
+
+---
+
 ## 👨‍💻 Auteur
 
 **Omar Naceur**

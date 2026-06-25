@@ -1,9 +1,9 @@
 requests
 python-dotenv
 groq
-requests
 playwright
 fastapi
 uvicorn
 jinja2
 streamlit
+beautifulsoup4

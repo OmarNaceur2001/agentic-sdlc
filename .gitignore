@@ -21,3 +21,6 @@ temp_*.html
 
 # Logs
 *.log
+
+# Databases
+*.db

@@ -25,6 +25,11 @@ import requests
 from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright, Error as PlaywrightError
 
+try:
+    from feature_extractor import enregistrer_features_ml
+except Exception:
+    enregistrer_features_ml = None
+
 
 # Charger les variables depuis .env
 load_dotenv()
@@ -362,7 +367,7 @@ def tester_avec_playwright(
     html: str,
     ticket_id: str,
     resultat: ResultatTest,
-) -> None:
+) -> dict:
     """
     Ouvre le HTML dans Chromium avec Playwright.
     Vérifie :
@@ -372,7 +377,16 @@ def tester_avec_playwright(
     - erreurs console
     - screenshot
     """
+    import time
     log.info("Test 3 : ouverture dans Chromium avec Playwright")
+
+    playwright_metrics = {
+        "loaded": False,
+        "text_length": 0,
+        "js_errors": 0,
+        "console_errors": 0,
+        "load_time_ms": 0.0,
+    }
 
     chemin_temp = Path(f"temp_{ticket_id}.html").resolve()
     dossier_screenshots = Path("screenshots")
@@ -404,6 +418,7 @@ def tester_avec_playwright(
                 lambda requete: requetes_echouees.append(requete.url),
             )
 
+            t_start = time.time()
             page.goto(chemin_temp.as_uri(), wait_until="load", timeout=15000)
 
             try:
@@ -412,6 +427,9 @@ def tester_avec_playwright(
                 resultat.ajouter_avertissement(
                     "Networkidle non atteint dans le délai prévu"
                 )
+
+            playwright_metrics["load_time_ms"] = (time.time() - t_start) * 1000.0
+            playwright_metrics["loaded"] = True
 
             texte_visible = page.inner_text("body")
 
@@ -422,17 +440,23 @@ def tester_avec_playwright(
                     f"   ✅ Page chargée : {len(texte_visible)} caractères visibles"
                 )
 
+            playwright_metrics["text_length"] = len(texte_visible.strip())
+
             if erreurs_js:
                 for erreur in erreurs_js:
                     resultat.ajouter_erreur(f"Erreur JavaScript : {erreur}")
             else:
                 log.info("   ✅ Aucune erreur JavaScript détectée")
 
+            playwright_metrics["js_errors"] = len(erreurs_js)
+
             if erreurs_console:
                 for erreur in erreurs_console[:5]:
                     resultat.ajouter_avertissement(
                         f"Erreur console navigateur : {erreur}"
                     )
+
+            playwright_metrics["console_errors"] = len(erreurs_console)
 
             if requetes_echouees:
                 for url in requetes_echouees[:5]:
@@ -454,6 +478,8 @@ def tester_avec_playwright(
     finally:
         if chemin_temp.exists():
             chemin_temp.unlink()
+
+    return playwright_metrics
 
 
 # ─────────────────────────────────────────────────────────────
@@ -640,7 +666,22 @@ def tester_ticket(ticket: dict) -> None:
     else:
         tester_structure_html(html, resultat)
         tester_elements_metier(html, titre, resultat)
-        tester_avec_playwright(html, ticket_id, resultat)
+        playwright_metrics = tester_avec_playwright(html, ticket_id, resultat)
+
+        if enregistrer_features_ml:
+            try:
+                enregistrer_features_ml(
+                    ticket=ticket,
+                    html=html,
+                    playwright_metrics=playwright_metrics,
+                    test_passed=resultat.succes,
+                    retry_number=ticket.get("retry_number", 0),
+                    prompt_version="v1",
+                    run_id="",
+                )
+                log.info(f"[ML] Features sauvegardées pour {ticket_id}")
+            except Exception as e:
+                log.warning(f"[ML] Impossible de sauvegarder les features : {e}")
 
     rapport = resultat.rapport()
 

@@ -143,3 +143,50 @@ def get_tickets():
     except Exception as e:
         return {"error": str(e)}
 
+
+@app.get("/api/pipeline-runs")
+def get_pipeline_runs():
+    import sqlite3
+    db_path = "pipeline_runs.db"
+    if not os.path.exists(db_path):
+        return []
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT * FROM pipeline_runs ORDER BY id DESC")
+        rows = cursor.fetchall()
+        return [dict(r) for r in rows]
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+
+@app.get("/api/pipeline-runs/stats")
+def get_pipeline_runs_stats():
+    try:
+        from feature_extractor import statistiques_features
+        return statistiques_features()
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/api/pipeline-runs/ticket/{ticket_id}")
+def get_pipeline_runs_by_ticket(ticket_id: str):
+    import sqlite3
+    db_path = "pipeline_runs.db"
+    if not os.path.exists(db_path):
+        return []
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT * FROM pipeline_runs WHERE ticket_id = ? ORDER BY id DESC", (ticket_id,))
+        rows = cursor.fetchall()
+        return [dict(r) for r in rows]
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        conn.close()
+

@@ -20,6 +20,11 @@ from dotenv import load_dotenv
 
 from code_agent import lire_tickets_todo, traiter_ticket
 
+try:
+    from feature_extractor import enregistrer_features_ml
+except Exception:
+    enregistrer_features_ml = None
+
 from testing_agent import (
     lire_tickets_in_review,
     telecharger_html_github,
@@ -195,7 +200,22 @@ def tester_ticket_avec_resultat(ticket: dict) -> bool:
     else:
         tester_structure_html(html, resultat)
         tester_elements_metier(html, titre, resultat)
-        tester_avec_playwright(html, ticket_id, resultat)
+        playwright_metrics = tester_avec_playwright(html, ticket_id, resultat)
+
+        if enregistrer_features_ml:
+            try:
+                enregistrer_features_ml(
+                    ticket=ticket,
+                    html=html,
+                    playwright_metrics=playwright_metrics,
+                    test_passed=resultat.succes,
+                    retry_number=retries.get(ticket_id, 0),
+                    prompt_version="v1",
+                    run_id="",
+                )
+                log.info(f"[ML] Features sauvegardées pour {ticket_id}")
+            except Exception as e:
+                log.warning(f"[ML] Impossible de sauvegarder les features : {e}")
 
     rapport = resultat.rapport()
 
