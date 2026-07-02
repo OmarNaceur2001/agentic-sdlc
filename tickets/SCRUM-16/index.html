@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Startup IA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    header {
+      background-color: #3498db;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    .hero {
+      background-image: linear-gradient(to bottom, #3498db, #9b59b6);
+      padding: 100px;
+      text-align: center;
+      color: #fff;
+    }
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+    .hero button {
+      background-color: #fff;
+      color: #3498db;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .hero button:hover {
+      background-color: #ccc;
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .feature {
+      background-color: #fff;
+      padding: 20px;
+      margin: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: calc(33.33% - 20px);
+    }
+    .feature h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .feature p {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .pricing {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .price {
+      background-color: #fff;
+      padding: 20px;
+      margin: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: calc(33.33% - 20px);
+    }
+    .price h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .price p {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .price.button {
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .price.button:hover {
+      background-color: #2980b9;
+    }
+    .testimonials {
+      background-color: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+    }
+    .testimonials p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .contact {
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .contact h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .contact form {
+      display: flex;
+      flex-direction: column;
+    }
+    .contact input, .contact textarea {
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+    }
+    .contact button {
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .contact button:hover {
+      background-color: #2980b9;
+    }
+    footer {
+      background-color: #3498db;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    @media only screen and (max-width: 768px) {
+      .features {
+        flex-direction: column;
+      }
+      .feature {
+        width: 100%;
+        margin: 20px 0;
+      }
+      .pricing {
+        flex-direction: column;
+      }
+      .price {
+        width: 100%;
+        margin: 20px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Startup IA</h1>
+  </header>
+  <div class="hero">
+    <h1>Intelligence Artificielle</h1>
+    <p>Nous sommes une startup spécialisée dans l'intelligence artificielle</p>
+    <button>Découvrir</button>
+    <button>En savoir plus</button>
+  </div>
+  <div class="features">
+    <div class="feature">
+      <h2>IA</h2>
+      <p>Nous développons des solutions d'intelligence artificielle pour les entreprises</p>
+    </div>
+    <div class="feature">
+      <h2>Automatisation</h2>
+      <p>Nous automatisons les processus pour améliorer l'efficacité</p>
+    </div>
+    <div class="feature">
+      <h2>Analyse de données</h2>
+      <p>Nous analysons les données pour prendre des décisions éclairées</p>
+    </div>
+    <div class="feature">
+      <h2>Machine Learning</h2>
+      <p>Nous utilisons le machine learning pour améliorer les performances</p>
+    </div>
+    <div class="feature">
+      <h2>Cloud</h2>
+      <p>Nous hébergeons nos solutions dans le cloud pour une meilleure flexibilité</p>
+    </div>
+    <div class="feature">
+      <h2>Sécurité</h2>
+      <p>Nous mettons en place des mesures de sécurité pour protéger les données</p>
+    </div>
+  </div>
+  <div class="pricing">
+    <div class="price">
+      <h2>Basic</h2>
+      <p>10 utilisateurs</p>
+      <p>100 Go de stockage</p>
+      <button class="button">Acheter</button>
+    </div>
+    <div class="price" style="border: 2px solid #3498db;">
+      <h2>Pro</h2>
+      <p>50 utilisateurs</p>
+      <p>1 To de stockage</p>
+      <button class="button">Acheter</button>
+    </div>
+    <div class="price">
+      <h2>Enterprise</h2>
+      <p>100 utilisateurs</p>
+      <p>5 To de stockage</p>
+      <button class="button">Acheter</button>
+    </div>
+  </div>
+  <div class="testimonials">
+    <p>Nous sommes satisfaits de nos résultats avec la startup IA</p>
+  </div>
+  <div class="contact">
+    <h2>Contactez-nous</h2>
+    <form>
+      <input type="text" placeholder="Nom">
+      <input type="email" placeholder="Email">
+      <textarea placeholder="Message"></textarea>
+      <button>Envoyer</button>
+    </form>
+  </div>
+  <footer>
+    <p>© 2023 Startup IA</p>
+  </footer>
+  <script>
+    window.addEventListener('scroll', function() {
+      var scrollPosition = window.scrollY;
+      if (scrollPosition > 100) {
+        document.querySelector('header').style.background = '#2980b9';
+      } else {
+        document.querySelector('header').style.background = '#3498db';
+      }
+    });
+    document.querySelector('.contact button').addEventListener('click', function() {
+      alert('Merci de nous contacter !');
+    });
+    document.querySelector('.price.button').addEventListener('click', function() {
+      alert('Merci de votre achat !');
+    });
+  </script>
+</body>
+</html>
