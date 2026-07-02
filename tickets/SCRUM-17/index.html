@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Startup IA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Startup IA</h1>
+  </header>
+  <div class="container">
+    <h2>Présentation</h2>
+    <p>Nous sommes une startup spécialisée dans l'intelligence artificielle. Nous développons des solutions innovantes pour aider les entreprises à améliorer leur efficacité et leur productivité.</p>
+    <button class="button">En savoir plus</button>
+    <h2>Nos services</h2>
+    <ul>
+      <li>Développement de chatbots</li>
+      <li>Analyse de données</li>
+      <li>Conception de systèmes de recommandation</li>
+    </ul>
+    <form>
+      <label for="name">Nom :</label>
+      <input type="text" id="name" name="name"><br><br>
+      <label for="email">Email :</label>
+      <input type="email" id="email" name="email"><br><br>
+      <button class="button">Envoyer</button>
+    </form>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const button = document.querySelector(".button");
+      button.addEventListener("click", function() {
+        alert("Merci de votre intérêt !");
+      });
+    });
+  </script>
+</body>
+</html>
