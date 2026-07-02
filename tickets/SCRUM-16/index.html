@@ -7,93 +7,147 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+      background-color: #f0f0f0;
     }
     .header {
-      background-color: #4567b7;
+      background-color: #3498db;
       color: #fff;
       padding: 20px;
       text-align: center;
     }
     .hero {
-      background-image: linear-gradient(to bottom, #4567b7, #6495ed);
+      background-image: linear-gradient(to bottom, #3498db, #9b59b6);
       padding: 100px;
       text-align: center;
+      color: #fff;
     }
     .hero h1 {
       font-size: 48px;
+      margin-bottom: 20px;
     }
     .hero p {
-      font-size: 24px;
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+    .hero button {
+      background-color: #fff;
+      color: #3498db;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .hero button:hover {
+      background-color: #ccc;
     }
     .features {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      padding: 20px;
     }
     .feature {
       background-color: #fff;
+      padding: 20px;
+      margin: 20px;
       border: 1px solid #ddd;
       border-radius: 10px;
-      margin: 20px;
-      padding: 20px;
-      width: 200px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: calc(33.33% - 20px);
     }
     .feature h2 {
-      font-size: 24px;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .feature p {
+      font-size: 14px;
+      margin-bottom: 20px;
     }
     .pricing {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      background-color: #f0f0f0;
+      padding: 20px;
+      text-align: center;
     }
-    .price {
+    .pricing .card {
       background-color: #fff;
+      padding: 20px;
+      margin: 20px;
       border: 1px solid #ddd;
       border-radius: 10px;
-      margin: 20px;
-      padding: 20px;
-      width: 200px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: calc(33.33% - 20px);
+      display: inline-block;
     }
-    .price h2 {
-      font-size: 24px;
+    .pricing .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
     }
-    .price.highlight {
-      background-color: #f0f0f0;
+    .pricing .card p {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .pricing .card button {
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .pricing .card button:hover {
+      background-color: #9b59b6;
     }
     .testimonials {
       background-color: #f0f0f0;
       padding: 20px;
+      text-align: center;
     }
-    .testimonial {
+    .testimonials .card {
       background-color: #fff;
+      padding: 20px;
+      margin: 20px;
       border: 1px solid #ddd;
       border-radius: 10px;
-      margin: 20px;
-      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: calc(50% - 20px);
+      display: inline-block;
     }
-    .testimonial p {
-      font-size: 18px;
+    .testimonials .card p {
+      font-size: 14px;
+      margin-bottom: 20px;
     }
     .contact {
-      background-color: #4567b7;
-      color: #fff;
+      background-color: #f0f0f0;
       padding: 20px;
+      text-align: center;
     }
     .contact form {
-      display: flex;
-      flex-direction: column;
+      display: inline-block;
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     .contact input, .contact textarea {
-      margin-bottom: 20px;
+      width: 100%;
       padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
     }
     .contact button {
-      background-color: #6495ed;
+      background-color: #3498db;
       color: #fff;
-      padding: 10px;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .contact button:hover {
+      background-color: #9b59b6;
     }
     .footer {
-      background-color: #4567b7;
+      background-color: #3498db;
       color: #fff;
       padding: 20px;
       text-align: center;
@@ -103,13 +157,16 @@
         flex-direction: column;
       }
       .feature {
-        margin: 10px;
+        width: 100%;
+        margin: 20px 0;
       }
-      .pricing {
-        flex-direction: column;
+      .pricing .card {
+        width: 100%;
+        margin: 20px 0;
       }
-      .price {
-        margin: 10px;
+      .testimonials .card {
+        width: 100%;
+        margin: 20px 0;
       }
     }
   </style>
@@ -119,69 +176,66 @@
     <h1>Startup IA</h1>
   </header>
   <section class="hero">
-    <h1>Bienvenue sur notre plateforme IA</h1>
-    <p>Découvrez nos solutions innovantes pour votre entreprise</p>
+    <h1>Intelligence Artificielle</h1>
+    <p>Nous sommes une startup spécialisée dans l'intelligence artificielle</p>
+    <button>Découvrir</button>
     <button>En savoir plus</button>
-    <button>Nous contacter</button>
   </section>
   <section class="features">
     <div class="feature">
       <h2>IA</h2>
-      <p>Intelligence artificielle pour votre entreprise</p>
+      <p>Nous développons des solutions d'intelligence artificielle pour les entreprises</p>
     </div>
     <div class="feature">
       <h2>Automatisation</h2>
-      <p>Automatisez vos processus pour gagner du temps</p>
+      <p>Nous automatisons les processus pour améliorer l'efficacité</p>
     </div>
     <div class="feature">
       <h2>Analyse de données</h2>
-      <p>Analysez vos données pour prendre des décisions éclairées</p>
+      <p>Nous analysons les données pour prendre des décisions éclairées</p>
     </div>
     <div class="feature">
       <h2>Machine Learning</h2>
-      <p>Apprenez à vos machines à prendre des décisions</p>
+      <p>Nous utilisons le machine learning pour améliorer les performances</p>
     </div>
     <div class="feature">
       <h2>Cloud</h2>
-      <p>Stockez vos données en toute sécurité dans le cloud</p>
+      <p>Nous utilisons le cloud pour stocker et traiter les données</p>
     </div>
     <div class="feature">
       <h2>Sécurité</h2>
-      <p>Protégez vos données contre les menaces</p>
+      <p>Nous nous assurons de la sécurité des données et des systèmes</p>
     </div>
   </section>
   <section class="pricing">
-    <div class="price">
+    <h1>Prix</h1>
+    <div class="card">
       <h2>Basic</h2>
-      <p>10 utilisateurs</p>
-      <p>100 Go de stockage</p>
-      <button>S'inscrire</button>
+      <p>10$ par mois</p>
+      <button>Acheter</button>
     </div>
-    <div class="price highlight">
+    <div class="card" style="background-color: #9b59b6; color: #fff;">
       <h2>Pro</h2>
-      <p>50 utilisateurs</p>
-      <p>1 To de stockage</p>
-      <button>S'inscrire</button>
+      <p>20$ par mois</p>
+      <button>Acheter</button>
     </div>
-    <div class="price">
+    <div class="card">
       <h2>Enterprise</h2>
-      <p>100 utilisateurs</p>
-      <p>5 To de stockage</p>
-      <button>S'inscrire</button>
+      <p>50$ par mois</p>
+      <button>Acheter</button>
     </div>
   </section>
   <section class="testimonials">
-    <div class="testimonial">
-      <p>C'est une plateforme incroyable !</p>
-      <p>— Jean, CEO de XYZ</p>
+    <h1>Témoignages</h1>
+    <div class="card">
+      <p>Nous sommes très satisfaits des services de cette startup</p>
     </div>
-    <div class="testimonial">
-      <p>Je suis très satisfait de la qualité du service</p>
-      <p>— Pierre, CTO de ABC</p>
+    <div class="card">
+      <p>La qualité des services est exceptionnelle</p>
     </div>
   </section>
   <section class="contact">
-    <h2>Nous contacter</h2>
+    <h1>Contact</h1>
     <form>
       <input type="text" placeholder="Nom">
       <input type="email" placeholder="Email">
@@ -190,29 +244,29 @@
     </form>
   </section>
   <footer class="footer">
-    <p>© 2023 Startup IA</p>
+    <p>2023 Startup IA</p>
   </footer>
   <script>
     // Menu responsive
     const menu = document.querySelector('.header');
     const menuButton = document.querySelector('.header button');
     menuButton.addEventListener('click', () => {
-      menu.classList.toggle('open');
+      menu.classList.toggle('active');
     });
     // Animation au scroll
     const sections = document.querySelectorAll('section');
     sections.forEach((section) => {
       section.addEventListener('scroll', () => {
-        section.classList.add('animate');
+        section.classList.add('active');
       });
     });
     // Effet hover bouton "Retour en haut"
     const backButton = document.querySelector('.footer button');
     backButton.addEventListener('mouseover', () => {
-      backButton.classList.add('hover');
+      backButton.style.background = '#9b59b6';
     });
     backButton.addEventListener('mouseout', () => {
-      backButton.classList.remove('hover');
+      backButton.style.background = '#3498db';
     });
     // Bouton "Retour en haut"
     const topButton = document.querySelector('.footer button');
