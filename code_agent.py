@@ -425,6 +425,6 @@ def main() -> None:
     print("  ✅ Code Agent terminé")
     print("=" * 65)
 
-
 if __name__ == "__main__":
     main()
+

@@ -33,7 +33,7 @@ JIRA_TOKEN = os.getenv("JIRA_TOKEN")
 JIRA_PROJECT_KEY = os.getenv("JIRA_PROJECT_KEY")
 
 # Statut cible configurable dans .env (ex: "En cours")
-JIRA_TARGET_STATUS = os.getenv("JIRA_TARGET_STATUS", "En cours")
+JIRA_TARGET_STATUS = os.getenv("JIRA_PROGRESS_STATUS", "En cours")
 
 AUTH = (JIRA_EMAIL, JIRA_TOKEN)
 

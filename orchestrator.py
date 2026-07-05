@@ -46,7 +46,7 @@ load_dotenv()
 # Configuration
 # ─────────────────────────────────────────────────────────────
 
-POLL_INTERVAL = int(os.getenv("POLL_INTERVAL_SECONDS", "30"))
+POLL_INTERVAL = int(os.getenv("POLL_INTERVAL_SECONDS", "10"))
 MAX_RETRIES = int(os.getenv("MAX_RETRIES", "3"))
 
 

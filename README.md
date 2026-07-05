@@ -1,6 +1,6 @@
 # 🤖 Agentic SDLC
 
-> Un système d'ingénierie logicielle autonome qui transforme un ticket Jira en page web deployée — automatiquement.
+> Un système d'ingénierie logicielle autonome qui transforme un ticket Jira en page web déployée — automatiquement.
 
 ![Pipeline](https://img.shields.io/badge/Pipeline-Automated-brightgreen)
 ![Python](https://img.shields.io/badge/Python-3.11+-blue)
@@ -11,14 +11,14 @@
 
 ---
 
-## 🎯 Vue d'ensemble
+## 🎯 Présentation
 
-**Agentic SDLC** est un système multi-agents qui automatise le cycle de développement logiciel complet :
+**Agentic SDLC** est un système multi-agents qui automatise l’intégralité du cycle de développement logiciel, depuis la création d’un ticket dans Jira jusqu’à la génération et la validation d’une page web, sans intervention humaine.
 
-```
-Ticket Jira (To Do)
+```text
+Ticket Jira (À faire)
        │
-       ▼  30 secondes
+       ▼  (Polling toutes les 30s)
 Orchestrator détecte
        │
        ▼
@@ -32,61 +32,64 @@ Testing Agent (Playwright)
   → Teste dans Chromium
   → Vérifie les erreurs JS
        │
-       ├── ✅ Tests OK  → Jira : DONE
-       └── ❌ Tests KO  → Jira : TO DO (retry x3)
+       ├── ✅ Tests OK  → Jira : Terminé(e)
+       └── ❌ Tests KO  → Jira : À faire (retry x3)
 ```
 
-**Résultat :** Un ticket créé dans Jira devient une page web testée et archivée sur GitHub en moins de 60 secondes, sans intervention humaine.
+### Résultat :
+ un ticket créé dans Jira devient une page web testée et archivée sur GitHub en moins d’une minute, sans aucune interaction humaine.
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    JIRA CLOUD                           │
-│         (Tickets : To Do / In Review / Done)           │
-└──────────────────────┬──────────────────────────────────┘
-                       │ Poll toutes les 30s
-                       ▼
-┌─────────────────────────────────────────────────────────┐
-│              ORCHESTRATOR (Python)                      │
-│  • Détecte les tickets "À faire"                       │
-│  • Coordonne Code Agent + Testing Agent                │
-│  • Gère les retries (max 3)                            │
-│  • Log toutes les actions                              │
-└──────────┬──────────────────────────┬───────────────────┘
-           │                          │
-           ▼                          ▼
-┌──────────────────┐      ┌──────────────────────────────┐
-│   CODE AGENT     │      │      TESTING AGENT           │
-│                  │      │                              │
-│ • Lit ticket     │      │ • Télécharge HTML (GitHub)  │
-│ • Prompt Llama   │      │ • Valide structure HTML      │
-│ • Génère HTML    │      │ • Ouvre dans Chromium        │
-│ • Upload GitHub  │      │ • Vérifie erreurs JS         │
-│ • Status: Review │      │ • Screenshot automatique     │
-└────────┬─────────┘      │ • Status: Done ou To Do      │
-         │                └──────────────────────────────┘
-         ▼
-┌─────────────────────────────────────────────────────────┐
-│                    GITHUB                               │
-│         tickets/SCRUM-X/index.html                     │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                        JIRA CLOUD                          │
+│          (Tickets : À faire / En révision / Terminé)       │
+└────────────────────────┬────────────────────────────────────┘
+                         │ Interrogation toutes les 30s
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    ORCHESTRATOR (Python)                    │
+│  • Détecte les tickets « À faire »                         │
+│  • Coordonne Code Agent et Testing Agent                   │
+│  • Gère les tentatives (max 3)                             │
+│  • Journalise toutes les actions                           │
+└──────────┬────────────────────────────┬────────────────────┘
+           │                            │
+           ▼                            ▼
+┌──────────────────────┐     ┌───────────────────────────────┐
+│     CODE AGENT       │     │      TESTING AGENT            │
+│                      │     │                               │
+│ • Lit le ticket      │     │ • Télécharge HTML (GitHub)   │
+│ • Construit le prompt│     │ • Valide la structure HTML    │
+│ • Appelle Llama 3.3  │     │ • Ouvre dans Chromium         │
+│ • Génère le code     │     │ • Vérifie les erreurs JS      │
+│ • Uploade sur GitHub │     │ • Capture d'écran             │
+│ • Passe en révision  │     │ • Met à jour Jira (Done/To Do)│
+└──────────────────────┘     └───────────────────────────────┘
+           │                            │
+           └──────────────┬─────────────┘
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│                        GITHUB                              │
+│              tickets/SCRUM-X/index.html                    │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## 🧰 Stack technique
 
-| Composant | Technologie | Rôle |
-|-----------|-------------|------|
-| Orchestration | Python 3.11 | Coordination des agents |
-| API Ticketing | Jira REST API v3 | Source des tickets |
-| LLM | Groq / Llama 3.3 70B | Génération de code |
-| Stockage code | GitHub REST API | Versioning du code généré |
-| Tests navigateur | Playwright / Chromium | Validation E2E |
-| Variables | python-dotenv | Configuration sécurisée |
+| Composant          | Technologie               | Rôle                               |
+|--------------------|---------------------------|------------------------------------|
+| Orchestration      | Python 3.11               | Coordination des agents            |
+| API Jira           | REST API v3               | Source des tickets                 |
+| LLM                | Groq / Llama 3.3 70B      | Génération de code                 |
+| Stockage code      | GitHub REST API           | Versionnement du code généré       |
+| Tests navigateur   | Playwright / Chromium     | Validation end-to-end              |
+| Configuration      | python-dotenv             | Gestion sécurisée des variables    |
 
 ---
 
@@ -94,57 +97,56 @@ Testing Agent (Playwright)
 
 ```text
 agentic-sdlc/
-├── orchestrator.py          # Cerveau du système — pipeline complet
+├── orchestrator.py          # Coordonnateur principal du pipeline
 ├── code_agent.py            # Génération HTML via Llama + upload GitHub
 ├── testing_agent.py         # Validation Playwright + mise à jour Jira
-├── jira_agent.py            # Utilitaires Jira
-├── dashboard_app.py         # Backend FastAPI du dashboard web
-├── test_connections.py      # Vérification initiale des APIs
+├── jira_agent.py            # Utilitaires d'accès à Jira
+├── dashboard_app.py         # Interface web (FastAPI) de supervision
+├── test_connections.py      # Vérification des connexions aux APIs
 ├── requirements.txt         # Dépendances Python
-├── .env.example             # Template de configuration
-├── .gitignore               # Exclusions Git
+├── .env.example             # Modèle de configuration
+├── .gitignore               # Fichiers exclus de Git
 ├── templates/
-│   └── dashboard.html       # Interface web du dashboard
-├── static/                  # Fichiers statiques éventuels
-├── tickets/                 # Code généré par ticket
+│   └── dashboard.html       # Interface HTML du tableau de bord
+├── tickets/                 # Code généré, organisé par ticket
 │   ├── SCRUM-5/
 │   │   └── index.html
-│   ├── SCRUM-6/
-│   │   └── index.html
 │   └── ...
-└── screenshots/             # Screenshots Playwright générés localement
+└── screenshots/             # Captures d'écran Playwright
     ├── SCRUM-5.png
     └── ...
+```
+
 ---
 
 ## 🚀 Installation
 
 ### Prérequis
 
-- Python 3.10+
-- Compte Jira Cloud (gratuit)
-- Compte GitHub
-- Clé API Groq (gratuite)
+- Python 3.10 ou supérieur
+- Un compte Jira Cloud (gratuit)
+- Un compte GitHub
+- Une clé API Groq (gratuite)
 
-### Étapes
+### Procédure
 
 ```bash
-# 1. Cloner le repository
+# 1. Cloner le dépôt
 git clone https://github.com/OmarNaceur2001/agentic-sdlc.git
 cd agentic-sdlc
 
-# 2. Créer l'environnement virtuel
+# 2. Créer et activer l'environnement virtuel
 python -m venv venv
-venv\Scripts\activate      # Windows
-source venv/bin/activate   # Mac/Linux
+venv\Scripts\activate         # Windows
+source venv/bin/activate      # macOS / Linux
 
 # 3. Installer les dépendances
 pip install -r requirements.txt
 playwright install chromium
 
-# 4. Configurer les variables
+# 4. Configurer les variables d'environnement
 cp .env.example .env
-# Éditer .env avec vos clés API
+# Éditer .env avec vos identifiants et clés API
 
 # 5. Vérifier les connexions
 python test_connections.py
@@ -155,7 +157,7 @@ python orchestrator.py
 
 ---
 
-## ⚙️ Configuration `.env`
+## ⚙️ Configuration – `.env`
 
 ```env
 # Jira
@@ -176,50 +178,56 @@ GROQ_MODEL=llama-3.3-70b-versatile
 POLL_INTERVAL_SECONDS=30
 MAX_RETRIES=3
 
-# Statuts Jira
+# Statuts Jira (doivent correspondre exactement aux statuts de votre projet)
+# Remplissez ces valeurs avec EXACTEMENT les libellés Jira.
+# Elles sont utilisées par les agents pour sélectionner les tickets et effectuer les transitions.
+JIRA_SOURCE_STATUS=À faire
+JIRA_PROGRESS_STATUS=En cours
 JIRA_REVIEW_STATUS=Revue en cours
 JIRA_DONE_STATUS=Terminé(e)
 JIRA_REOPEN_STATUS=À faire
 ```
 
+> **⚠️ Remarque :** Les libellés des statuts Jira ci-dessus sont donnés à titre d’exemple. Adaptez-les aux statuts réels de votre projet Jira. Le code utilise ces variables pour effectuer les transitions.
+
 ---
 
-## 🔄 Workflow détaillé
+## 🔄 Déroulement du pipeline
 
-### 1. Créer un ticket dans Jira
+### 1. Création d’un ticket dans Jira
 
 ```
-Title: Create a login page
-Description: Simple login form with email and password fields
-Status: To Do
+Titre : Créer une page de connexion
+Description : Formulaire simple avec email et mot de passe
+Statut : À faire
 ```
 
-### 2. L'Orchestrator détecte le ticket (≤ 30s)
+### 2. L’Orchestrator détecte le ticket (≤ 30 s)
 
 ```
 2026-06-16 23:38:24  INFO  [CODE AGENT] Traitement : SCRUM-10
 ```
 
-### 3. Le Code Agent génère et uploade
+### 3. Le Code Agent génère la page et l’upload
 
 ```
-✅ Code généré (1282 caractères)
+✅ Code généré (1 282 caractères)
 ✅ Fichier uploadé : github.com/.../tickets/SCRUM-10/index.html
 ```
 
-### 4. Le Testing Agent valide
+### 4. Le Testing Agent valide la page
 
 ```
 ✅ Structure HTML valide
-✅ Page chargée : 78 caractères visibles
+✅ Page chargée – 78 caractères visibles
 ✅ Aucune erreur JavaScript
-📸 Screenshot : screenshots/SCRUM-10.png
+📸 Capture d'écran : screenshots/SCRUM-10.png
 ```
 
-### 5. Résultat dans Jira
+### 5. Mise à jour du ticket dans Jira
 
 ```
-Status : Terminé(e) ✅
+Statut : Terminé(e) ✅
 Commentaire : Tests automatiques réussis + rapport complet
 ```
 
@@ -227,94 +235,67 @@ Commentaire : Tests automatiques réussis + rapport complet
 
 ## 📊 Résultats obtenus
 
-| Ticket | Description | Résultat | Temps |
-|--------|-------------|----------|-------|
-| SCRUM-5 | Login page | ✅ DONE | ~45s |
-| SCRUM-6 | Calculator | ✅ DONE | ~45s |
-| SCRUM-7 | Contact form | ✅ DONE | ~45s |
-| SCRUM-9 | Salary dashboard | ✅ DONE | ~45s |
-| SCRUM-10 | Profile page | ✅ DONE | ~49s |
-| SCRUM-11 | Profile page | ✅ DONE | ~49s |
+| Ticket   | Description             | Résultat   | Durée |
+|----------|-------------------------|------------|-------|
+| SCRUM-5  | Page de connexion       | ✅ DONE    | ~45 s |
+| SCRUM-6  | Calculatrice            | ✅ DONE    | ~45 s |
+| SCRUM-7  | Formulaire de contact   | ✅ DONE    | ~45 s |
+| SCRUM-9  | Tableau de bord salaire | ✅ DONE    | ~45 s |
+| SCRUM-10 | Page profil             | ✅ DONE    | ~49 s |
+| SCRUM-11 | Page profil (bis)       | ✅ DONE    | ~49 s |
 
 **Temps moyen ticket → DONE : ~47 secondes**
 
 ---
 
-## 📡 Dashboard temps réel — WebSocket Live Logs
+## 📡 Tableau de bord – Supervision et exécution manuelle
 
-Le Dashboard FastAPI intègre désormais un système de journaux en temps réel basé sur WebSocket.
+Le tableau de bord FastAPI expose une interface web et des endpoints REST pour interagir avec le pipeline :
 
-### Fonctionnalités
+- **`/`** – interface HTML (`templates/dashboard.html`)
+- **`POST /api/run-code-agent`** – lance le Code Agent (lit les tickets « To Do »/« À faire » côté Jira)
+- **`POST /api/run-testing-agent`** – lance le Testing Agent (lit les tickets « Revue en cours » côté Jira)
 
-- Streaming live des logs depuis le backend vers le navigateur
-- Exécution du Code Agent depuis le Dashboard
-- Exécution du Testing Agent depuis le Dashboard
-- Exécution du pipeline complet depuis le Dashboard
-- Affichage progressif des logs dans la page `Logs`
-- Connexion directe entre l’interface web et les scripts Python
+- **`POST /api/run-full-pipeline`** – exécute l’intégralité du pipeline (Code Agent + Testing Agent)
+- **`GET /api/logs`** – retourne les dernières lignes du fichier `orchestrator.log`
+- **`GET /api/tickets`** – liste les tickets via l’API Jira (le dashboard n’utilise pas le filesystem pour la liste)
 
-### Endpoints WebSocket
+- **`GET /api/screenshots`** – liste les captures d’écran disponibles
 
-```text
-/ws/code-agent
-/ws/testing-agent
-/ws/full-pipeline
-```
+L’interface web permet de lancer ces actions manuellement et d’afficher les logs via des appels AJAX classiques.  
+Le système reste entièrement autonome grâce à `orchestrator.py` (boucle de polling Jira).
 
-### Fonctionnement
+
+### Flux de données (version REST)
 
 ```text
-Dashboard Web
-    ↓ WebSocket
-FastAPI Backend
-    ↓ subprocess
-Code Agent / Testing Agent
-    ↓ stdout ligne par ligne
-Page Logs du Dashboard
+Interface Web  →  Fetch /api/run-*  →  Backend FastAPI  →  subprocess  →  Code/Testing Agent
+                                                                                ↓ stdout
+Interface ←  Réponse JSON + /api/logs  ←  Backend  ←  logs écrits dans orchestrator.log
 ```
-
-### Résultat
-
-Le point `Dashboard temps réel — WebSocket live logs` est maintenant implémenté.
-Le dashboard ne se limite plus à lancer les scripts en mode synchrone : il peut afficher les journaux d’exécution en direct pendant le traitement.
 
 ---
 
-## 🗺️ Roadmap
+## 🗺️ Feuille de route
 
-- [x] Jira Agent — lecture et mise à jour des tickets
-- [x] Code Agent — génération HTML avec Llama 3.3
-- [x] Testing Agent — validation Playwright
-- [x] Orchestrator — pipeline complet avec retry
-- [x] Dashboard Web — interface locale FastAPI
-- [x] Dashboard temps réel — WebSocket live logs
-- [ ] Création dynamique de tickets Jira depuis le dashboard
-- [ ] Affichage dynamique des tickets depuis Jira API
-- [ ] Affichage réel des screenshots Playwright
-- [ ] Deploy Agent — GitHub Pages automatique
-- [ ] Multi-Agent — Developer + Tester + DevOps Agent
-
-
----
-
-## 🧠 Roadmap ML — Self-Improving Pipeline
-
-- [x] Data Logger — historique SQLite des runs pipeline
-- [x] API endpoints — /api/pipeline-runs + stats
-- [x] Feature Extractor — extraction ML features du code généré
-- [x] Intégration Feature Extractor dans Testing Agent
-- [ ] Code Quality Scorer — score rule-based v1
-- [ ] Dataset réel — minimum 50 runs pipeline
-- [ ] Random Forest Code Quality Model
-- [ ] Prompt Optimizer — amélioration automatique des prompts
-- [ ] Analytics Dashboard — ML insights
+- [x] **Jira Agent** – lecture et mise à jour des tickets
+- [x] **Code Agent** – génération HTML avec Llama 3.3
+- [x] **Testing Agent** – validation avec Playwright
+- [x] **Orchestrator** – pipeline complet avec reprise sur erreur
+- [x] **Dashboard Web** – interface locale FastAPI
+- [x] **API REST** de supervision et d’exécution manuelle
+- [ ] **Création dynamique de tickets Jira** depuis le tableau de bord (backend à implémenter)
+- [x] **Affichage dynamique** des tickets depuis l’API Jira (au lieu de fichiers locaux)
+- [ ] **Affichage réel des captures d’écran** Playwright dans l’interface
+- [ ] **Agent de déploiement** – déploiement automatique sur GitHub Pages
+- [ ] **WebSocket Live Logs** – remplacement des appels AJAX par une connexion temps réel (amélioration future)
 
 ---
 
 ## 👨‍💻 Auteur
 
-**Omar Naceur**
-Étudiant ingénieur AI & Data Science — ESPRIM (ESPRIT), Monastir, Tunisie
+**Omar Naceur**  
+Étudiant ingénieur en IA & Data Science – ESPRIM (ESPRIT), Monastir, Tunisie
 
 [![GitHub](https://img.shields.io/badge/GitHub-OmarNaceur2001-181717?logo=github)](https://github.com/OmarNaceur2001)
 
@@ -322,4 +303,4 @@ Le dashboard ne se limite plus à lancer les scripts en mode synchrone : il peut
 
 ## 📄 Licence
 
-MIT License — libre d'utilisation et de modification.
+Ce projet est distribué sous la licence MIT – utilisation et modification libres.

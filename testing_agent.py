@@ -401,73 +401,73 @@ def tester_avec_playwright(
         dossier_screenshots.mkdir(exist_ok=True)
 
         with sync_playwright() as playwright:
-            navigateur = playwright.chromium.launch(headless=True)
-            page = navigateur.new_page(viewport={"width": 1366, "height": 768})
+            with playwright.chromium.launch(headless=True) as navigateur:
+                page = navigateur.new_page(viewport={"width": 1366, "height": 768})
 
-            page.on("pageerror", lambda erreur: erreurs_js.append(str(erreur)))
+                page.on("pageerror", lambda erreur: erreurs_js.append(str(erreur)))
 
-            page.on(
-                "console",
-                lambda message: erreurs_console.append(message.text)
-                if message.type == "error"
-                else None,
-            )
-
-            page.on(
-                "requestfailed",
-                lambda requete: requetes_echouees.append(requete.url),
-            )
-
-            t_start = time.time()
-            page.goto(chemin_temp.as_uri(), wait_until="load", timeout=15000)
-
-            try:
-                page.wait_for_load_state("networkidle", timeout=10000)
-            except PlaywrightError:
-                resultat.ajouter_avertissement(
-                    "Networkidle non atteint dans le délai prévu"
+                page.on(
+                    "console",
+                    lambda message: erreurs_console.append(message.text)
+                    if message.type == "error"
+                    else None,
                 )
 
-            playwright_metrics["load_time_ms"] = (time.time() - t_start) * 1000.0
-            playwright_metrics["loaded"] = True
-
-            texte_visible = page.inner_text("body")
-
-            if len(texte_visible.strip()) < 5:
-                resultat.ajouter_erreur("La page semble vide dans Chromium")
-            else:
-                log.info(
-                    f"   ✅ Page chargée : {len(texte_visible)} caractères visibles"
+                page.on(
+                    "requestfailed",
+                    lambda requete: requetes_echouees.append(requete.url),
                 )
 
-            playwright_metrics["text_length"] = len(texte_visible.strip())
+                t_start = time.time()
+                page.goto(chemin_temp.as_uri(), wait_until="load", timeout=15000)
 
-            if erreurs_js:
-                for erreur in erreurs_js:
-                    resultat.ajouter_erreur(f"Erreur JavaScript : {erreur}")
-            else:
-                log.info("   ✅ Aucune erreur JavaScript détectée")
-
-            playwright_metrics["js_errors"] = len(erreurs_js)
-
-            if erreurs_console:
-                for erreur in erreurs_console[:5]:
+                try:
+                    page.wait_for_load_state("networkidle", timeout=10000)
+                except PlaywrightError:
                     resultat.ajouter_avertissement(
-                        f"Erreur console navigateur : {erreur}"
+                        "Networkidle non atteint dans le délai prévu"
                     )
 
-            playwright_metrics["console_errors"] = len(erreurs_console)
+                playwright_metrics["load_time_ms"] = (time.time() - t_start) * 1000.0
+                playwright_metrics["loaded"] = True
 
-            if requetes_echouees:
-                for url in requetes_echouees[:5]:
-                    resultat.ajouter_avertissement(
-                        f"Requête échouée : {url}"
+                texte_visible = page.inner_text("body")
+
+                if len(texte_visible.strip()) < 5:
+                    resultat.ajouter_erreur("La page semble vide dans Chromium")
+                else:
+                    log.info(
+                        f"   ✅ Page chargée : {len(texte_visible)} caractères visibles"
                     )
 
-            page.screenshot(path=str(chemin_screenshot), full_page=True)
-            log.info(f"   📸 Screenshot : {chemin_screenshot}")
+                playwright_metrics["text_length"] = len(texte_visible.strip())
 
-            navigateur.close()
+                if erreurs_js:
+                    for erreur in erreurs_js:
+                        resultat.ajouter_erreur(f"Erreur JavaScript : {erreur}")
+                else:
+                    log.info("   ✅ Aucune erreur JavaScript détectée")
+
+                playwright_metrics["js_errors"] = len(erreurs_js)
+
+                if erreurs_console:
+                    for erreur in erreurs_console[:5]:
+                        resultat.ajouter_avertissement(
+                            f"Erreur console navigateur : {erreur}"
+                        )
+
+                playwright_metrics["console_errors"] = len(erreurs_console)
+
+                if requetes_echouees:
+                    for url in requetes_echouees[:5]:
+                        resultat.ajouter_avertissement(
+                            f"Requête échouée : {url}"
+                        )
+
+                page.screenshot(path=str(chemin_screenshot), full_page=True)
+                log.info(f"   📸 Screenshot : {chemin_screenshot}")
+
+                # navigator closed by context manager
 
     except PlaywrightError as erreur:
         resultat.ajouter_erreur(f"Erreur Playwright : {erreur}")
