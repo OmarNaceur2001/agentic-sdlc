@@ -12,8 +12,11 @@ from collections import defaultdict
 
 ROOT = Path(".").resolve()
 EXCLUDE = {"venv", ".venv", ".git", "__pycache__", ".qodo", ".vscode", "node_modules"}
+# سكريبتات الأدوات تُستثنى — السكريبت لا يحلل نفسه
+TOOL_SCRIPTS = {"audit_project.py", "check_config_consistency.py"}
 PY_FILES = [p for p in ROOT.rglob("*.py")
-            if not any(x in p.parts for x in EXCLUDE)]
+            if not any(x in p.parts for x in EXCLUDE)
+            and p.name not in TOOL_SCRIPTS]
 HTML_FILES = [p for p in ROOT.rglob("*.html")
               if not any(x in p.parts for x in EXCLUDE)]
 
@@ -58,7 +61,24 @@ def check_imports():
               "urllib","http","socket","io","abc","copy","enum","inspect",
               "unittest","contextlib","warnings","traceback","sqlite3",
               "csv","html","xml","email","shutil","tempfile","glob",
-              "fnmatch","struct","binascii","pprint","dataclasses"}
+              "fnmatch","struct","binascii","pprint","dataclasses",
+              "unicodedata","string","textwrap","statistics","decimal",
+              "fractions","numbers","cmath","array","queue","heapq",
+              "bisect","weakref","types","gc","platform","signal",
+              "errno","ctypes","mmap","select","selectors"}
+
+    # import_name → package_name (quand ils diffèrent)
+    IMPORT_ALIASES = {
+        "bs4": "beautifulsoup4",
+        "cv2": "opencv_python",
+        "PIL": "pillow",
+        "sklearn": "scikit_learn",
+        "yaml": "pyyaml",
+        "dotenv": "python_dotenv",
+        "serial": "pyserial",
+        "usb": "pyusb",
+        "gi": "pygobject",
+    }
 
     for f in PY_FILES:
         src = read(f)
@@ -76,12 +96,14 @@ def check_imports():
                         break
                     else:
                         continue
-                if pkg in STDLIB:
+                # résoudre les aliases (bs4 → beautifulsoup4)
+                pkg_resolved = IMPORT_ALIASES.get(pkg, pkg)
+                if pkg in STDLIB or pkg_resolved in STDLIB:
                     continue
-                if pkg not in declared and pkg not in {"__future__","dotenv",
-                   "pydantic","starlette","anyio","httpx","certifi",
-                   "feature_extractor","code_agent","testing_agent",
-                   "jira_agent","orchestrator","dashboard_app"}:
+                if pkg_resolved not in declared and pkg not in declared and pkg not in {
+                   "__future__","dotenv","pydantic","starlette","anyio",
+                   "httpx","certifi","feature_extractor","code_agent",
+                   "testing_agent","jira_agent","orchestrator","dashboard_app"}:
                     W("IMPORTS", f"{f.name} importe '{pkg}' absent de requirements.txt")
 
 # ─────────────────────────────────────────────
@@ -238,21 +260,46 @@ def check_quality():
 # 9. LOGS RUNTIME — erreurs réelles en production
 # ─────────────────────────────────────────────
 def check_logs():
+    import datetime
     log_path = ROOT / "orchestrator.log"
     if not log_path.exists():
         I("LOGS", "orchestrator.log absent — pipeline jamais lancé ou log non configuré")
         return
     lines = read(log_path).splitlines()
-    errors   = [l for l in lines if "ERROR" in l or "CRITICAL" in l or "Traceback" in l]
-    warnings = [l for l in lines if "WARNING" in l or "WARN" in l]
-    retries  = [l for l in lines if "retry" in l.lower() or "tentative" in l.lower()]
-    if errors:
-        E("LOGS", f"{len(errors)} ligne(s) ERROR/CRITICAL dans orchestrator.log")
-        for l in errors[-3:]:
+    now   = datetime.datetime.now()
+    cutoff = now - datetime.timedelta(hours=24)
+
+    # parse timestamp depuis le début de ligne (format: "2026-06-16 00:28:09")
+    def parse_ts(line):
+        try:
+            return datetime.datetime.strptime(line[:19], "%Y-%m-%d %H:%M:%S")
+        except:
+            return None
+
+    all_errors   = [l for l in lines if "ERROR"    in l or "CRITICAL" in l or "Traceback" in l]
+    all_warnings = [l for l in lines if "WARNING"  in l or "WARN"     in l]
+    all_retries  = [l for l in lines if "retry"    in l.lower() or "tentative" in l.lower()]
+
+    # séparer récents (< 24h) des anciens
+    recent_errors = [l for l in all_errors if (ts := parse_ts(l)) and ts >= cutoff]
+    old_errors    = [l for l in all_errors if (ts := parse_ts(l)) and ts <  cutoff]
+
+    if recent_errors:
+        E("LOGS", f"{len(recent_errors)} erreur(s) RÉCENTE(S) (< 24h) dans orchestrator.log")
+        for l in recent_errors[-3:]:
             E("LOGS", f"  → {l.strip()[:120]}")
-    if retries:
-        W("LOGS", f"{len(retries)} retry(s) détecté(s) dans les logs")
-    I("LOGS", f"Total lignes log : {len(lines)} | Erreurs : {len(errors)} | Warnings : {len(warnings)} | Retries : {len(retries)}")
+    if old_errors:
+        I("LOGS", f"{len(old_errors)} erreur(s) ancienne(s) (> 24h) — non bloquant (ex: coupure réseau)")
+    if all_retries:
+        W("LOGS", f"{len(all_retries)} retry(s) détecté(s) dans les logs")
+
+    # date du premier et dernier log
+    first_ts = parse_ts(lines[0])  if lines else None
+    last_ts  = parse_ts(lines[-1]) if lines else None
+    ts_info  = ""
+    if first_ts and last_ts:
+        ts_info = f" | Du {first_ts.strftime('%d/%m %H:%M')} au {last_ts.strftime('%d/%m %H:%M')}"
+    I("LOGS", f"Total : {len(lines)} lignes{ts_info} | Erreurs récentes : {len(recent_errors)} | Anciennes : {len(old_errors)}")
 
 # ─────────────────────────────────────────────
 # 10. DÉPENDANCES — versions et conflits

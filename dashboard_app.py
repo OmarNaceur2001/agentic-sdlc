@@ -165,6 +165,7 @@ def get_pipeline_runs():
 
 @app.get("/api/pipeline-runs/stats")
 def get_pipeline_runs_stats():
+    
     try:
         from feature_extractor import statistiques_features
         return statistiques_features()
