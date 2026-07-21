@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test ticket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #container {
+      width: 80%;
+      margin: 40px auto;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Test ticket</h1>
+    <p>Description : Test depuis curl</p>
+    <button id="testButton">Tester</button>
+    <div id="result"></div>
+  </div>
+  <script>
+    document.getElementById('testButton').addEventListener('click', function() {
+      var resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = 'Test réussi !';
+    });
+  </script>
+</html>
