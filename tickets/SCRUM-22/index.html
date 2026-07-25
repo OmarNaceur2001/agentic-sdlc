@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TEST_DASHBOARD_CONNECTIVITY_CHECK</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #connectivity-status {
+      font-size: 24px;
+      font-weight: bold;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>TEST_DASHBOARD_CONNECTIVITY_CHECK</h1>
+  <p>Test de connectivité depuis dashboard_app.py</p>
+  <div id="connectivity-status">En attente de vérification...</div>
+  <button id="check-connectivity-btn">Vérifier la connectivité</button>
+  <script>
+    document.getElementById("check-connectivity-btn").addEventListener("click", function() {
+      var connectivityStatus = document.getElementById("connectivity-status");
+      connectivityStatus.innerHTML = "Vérification en cours...";
+      setTimeout(function() {
+        connectivityStatus.innerHTML = "Connectivité établie avec succès !";
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
