@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Instagram Login</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+		}
+		.login-container {
+			width: 300px;
+			margin: 50px auto;
+			background-color: #fff;
+			padding: 20px;
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0,0,0,0.1);
+		}
+		.login-form {
+			margin-top: 20px;
+		}
+		.login-form input {
+			width: 100%;
+			height: 40px;
+			margin-bottom: 20px;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
+		.login-form button {
+			width: 100%;
+			height: 40px;
+			background-color: #3897f0;
+			color: #fff;
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		.login-form button:hover {
+			background-color: #2f6fab;
+		}
+		.error-message {
+			color: #f00;
+			font-size: 14px;
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="login-container">
+		<h2>Instagram Login</h2>
+		<form id="login-form" class="login-form">
+			<input type="email" id="email" placeholder="Email">
+			<input type="password" id="password" placeholder="Password">
+			<button id="login-button">Login</button>
+			<div id="error-message" class="error-message"></div>
+		</form>
+	</div>
+	<script>
+		const loginForm = document.getElementById('login-form');
+		const emailInput = document.getElementById('email');
+		const passwordInput = document.getElementById('password');
+		const loginButton = document.getElementById('login-button');
+		const errorMessage = document.getElementById('error-message');
+		
+		loginButton.addEventListener('click', (e) => {
+			e.preventDefault();
+			const email = emailInput.value.trim();
+			const password = passwordInput.value.trim();
+			if (email === '' || password === '') {
+				errorMessage.innerText = 'Please fill in all fields';
+			} else {
+				// Simulate login success
+				if (email === 'test@example.com' && password === 'password123') {
+					window.location.href = 'dashboard.html';
+				} else {
+					errorMessage.innerText = 'Invalid email or password';
+				}
+			}
+		});
+	</script>
+</html>
