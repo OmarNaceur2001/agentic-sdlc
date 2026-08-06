@@ -1,1 +1,85 @@
-<!DOCTYPE html><html><head><title>Test</title></head><body><h1>Deploy Test</h1></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculatrice Scientifique</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #calculatrice {
+      width: 300px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #calculatrice input {
+      width: 100%;
+      height: 40px;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+    }
+    #calculatrice button {
+      width: 100%;
+      height: 40px;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 18px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #calculatrice button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <div id="calculatrice">
+    <input type="text" id="ecran" disabled>
+    <button onclick="effacer()">C</button>
+    <button onclick="ajouterValeur(7)">7</button>
+    <button onclick="ajouterValeur(8)">8</button>
+    <button onclick="ajouterValeur(9)">9</button>
+    <button onclick="ajouterValeur('/')">/</button>
+    <button onclick="ajouterValeur(4)">4</button>
+    <button onclick="ajouterValeur(5)">5</button>
+    <button onclick="ajouterValeur(6)">6</button>
+    <button onclick="ajouterValeur('*')">*</button>
+    <button onclick="ajouterValeur(1)">1</button>
+    <button onclick="ajouterValeur(2)">2</button>
+    <button onclick="ajouterValeur(3)">3</button>
+    <button onclick="ajouterValeur('-')">-</button>
+    <button onclick="ajouterValeur(0)">0</button>
+    <button onclick="ajouterValeur('.')">.</button>
+    <button onclick="calculer()">=</button>
+    <button onclick="ajouterValeur('+')">+</button>
+  </div>
+  <script>
+    let ecran = document.getElementById('ecran');
+    let valeur = '';
+    function effacer() {
+      ecran.value = '';
+      valeur = '';
+    }
+    function ajouterValeur(v) {
+      valeur += v;
+      ecran.value = valeur;
+    }
+    function calculer() {
+      try {
+        let resultat = eval(valeur);
+        ecran.value = resultat;
+        valeur = resultat.toString();
+      } catch (e) {
+        ecran.value = 'Erreur';
+        valeur = '';
+      }
+    }
+  </script>
+</html>
