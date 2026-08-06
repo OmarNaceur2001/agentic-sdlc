@@ -16,22 +16,20 @@
     }
     #calculatrice input {
       width: 100%;
-      height: 40px;
+      height: 30px;
       margin-bottom: 10px;
       padding: 10px;
-      font-size: 18px;
       border: 1px solid #ccc;
     }
     #calculatrice button {
       width: 100%;
-      height: 40px;
+      height: 30px;
       margin-bottom: 10px;
       padding: 10px;
-      font-size: 18px;
-      background-color: #4CAF50;
-      color: #fff;
       border: none;
       border-radius: 5px;
+      background-color: #4CAF50;
+      color: #fff;
       cursor: pointer;
     }
     #calculatrice button:hover {
@@ -41,45 +39,54 @@
 </head>
 <body>
   <div id="calculatrice">
-    <input type="text" id="ecran" disabled>
+    <input type="text" id="resultat" disabled>
     <button onclick="effacer()">C</button>
-    <button onclick="ajouterValeur(7)">7</button>
-    <button onclick="ajouterValeur(8)">8</button>
-    <button onclick="ajouterValeur(9)">9</button>
-    <button onclick="ajouterValeur('/')">/</button>
-    <button onclick="ajouterValeur(4)">4</button>
-    <button onclick="ajouterValeur(5)">5</button>
-    <button onclick="ajouterValeur(6)">6</button>
-    <button onclick="ajouterValeur('*')">*</button>
-    <button onclick="ajouterValeur(1)">1</button>
-    <button onclick="ajouterValeur(2)">2</button>
-    <button onclick="ajouterValeur(3)">3</button>
-    <button onclick="ajouterValeur('-')">-</button>
-    <button onclick="ajouterValeur(0)">0</button>
-    <button onclick="ajouterValeur('.')">.</button>
-    <button onclick="calculer()">=</button>
-    <button onclick="ajouterValeur('+')">+</button>
+    <button onclick="calculer('%')">Mod</button>
+    <button onclick="calculer('/')">/</button>
+    <button onclick="calculer('*')">*</button>
+    <button onclick="calculer(7)">7</button>
+    <button onclick="calculer(8)">8</button>
+    <button onclick="calculer(9)">9</button>
+    <button onclick="calculer('-')">-</button>
+    <button onclick="calculer(4)">4</button>
+    <button onclick="calculer(5)">5</button>
+    <button onclick="calculer(6)">6</button>
+    <button onclick="calculer('+')">+</button>
+    <button onclick="calculer(1)">1</button>
+    <button onclick="calculer(2)">2</button>
+    <button onclick="calculer(3)">3</button>
+    <button onclick="calculer('=')">=</button>
+    <button onclick="calculer(0)">0</button>
+    <button onclick="calculer('.')">.</button>
+    <button onclick="calculer('sin')">sin</button>
+    <button onclick="calculer('cos')">cos</button>
+    <button onclick="calculer('tan')">tan</button>
   </div>
   <script>
-    let ecran = document.getElementById('ecran');
-    let valeur = '';
-    function effacer() {
-      ecran.value = '';
-      valeur = '';
-    }
-    function ajouterValeur(v) {
-      valeur += v;
-      ecran.value = valeur;
-    }
-    function calculer() {
-      try {
-        let resultat = eval(valeur);
-        ecran.value = resultat;
-        valeur = resultat.toString();
-      } catch (e) {
-        ecran.value = 'Erreur';
-        valeur = '';
+    let resultat = '';
+    function calculer(valeur) {
+      if (valeur === '=') {
+        try {
+          resultat = eval(resultat);
+        } catch (e) {
+          resultat = 'Erreur';
+        }
+      } else if (valeur === 'C') {
+        resultat = '';
+      } else if (valeur === 'sin') {
+        resultat = Math.sin(resultat);
+      } else if (valeur === 'cos') {
+        resultat = Math.cos(resultat);
+      } else if (valeur === 'tan') {
+        resultat = Math.tan(resultat);
+      } else {
+        resultat += valeur;
       }
+      document.getElementById('resultat').value = resultat;
+    }
+    function effacer() {
+      resultat = '';
+      document.getElementById('resultat').value = resultat;
     }
   </script>
 </html>
