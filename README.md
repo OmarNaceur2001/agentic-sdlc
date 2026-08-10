@@ -45,8 +45,8 @@ Testing Agent (Playwright)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        JIRA CLOUD                          │
-│          (Tickets : À faire / En révision / Terminé)       │
+│                        JIRA CLOUD                           │
+│          (Tickets : À faire / En révision / Terminé)        │
 └────────────────────────┬────────────────────────────────────┘
                          │ Interrogation toutes les 30s
                          ▼
@@ -153,6 +153,11 @@ python test_connections.py
 
 # 6. Lancer le pipeline
 python orchestrator.py
+
+# 7. Lancer l'interface web
+python dashboard_app.py
+# Then open http://localhost:8000
+
 ```
 
 ---
@@ -284,11 +289,11 @@ Interface ←  Réponse JSON + /api/logs  ←  Backend  ←  logs écrits dans o
 - [x] **Orchestrator** – pipeline complet avec reprise sur erreur
 - [x] **Dashboard Web** – interface locale FastAPI
 - [x] **API REST** de supervision et d’exécution manuelle
-- [ ] **Création dynamique de tickets Jira** depuis le tableau de bord (backend à implémenter)
+- [x] **Création dynamique de tickets Jira** depuis le tableau de bord (`/api/tickets/create` + modal UI)
 - [x] **Affichage dynamique** des tickets depuis l’API Jira (au lieu de fichiers locaux)
-- [ ] **Affichage réel des captures d’écran** Playwright dans l’interface
-- [ ] **Agent de déploiement** – déploiement automatique sur GitHub Pages
-- [ ] **WebSocket Live Logs** – remplacement des appels AJAX par une connexion temps réel (amélioration future)
+- [x] **Affichage réel des captures d’écran** Playwright dans l’interface
+- [x] **Agent de déploiement** – déploiement automatique sur GitHub Pages
+- [x] **WebSocket Live Logs** – remplacement des appels AJAX par une connexion temps réel (amélioration future)
 
 ---
 

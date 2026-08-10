@@ -6,21 +6,26 @@ venv/
 __pycache__/
 *.pyc
 *.pyo
+# Runtime outputs
 orchestrator.log
+*.log
+pipeline_runs.db
+*.db
+
+# Generated pipeline output
+generated/
+tickets/
+
+# Screenshots runtime
+screenshots/
+
 # Fichiers système
 .DS_Store
 Thumbs.db
 
 # Testing Agent
-screenshots/
 temp_*.html
 
 # Fichiers IDE
 .vscode/
 .idea/
-
-# Logs
-*.log
-
-# Databases
-*.db

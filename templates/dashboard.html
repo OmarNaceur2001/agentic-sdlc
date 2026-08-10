@@ -688,9 +688,19 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
+            background: #64748B;
+            box-shadow: none;
+            animation: none;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .log-live.ws-connected {
             background: var(--accent2);
             box-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
             animation: pulse-dot 1.4s infinite;
+        }
+        .log-live.ws-disconnected {
+            background: var(--danger);
+            box-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
         }
         .log-body {
             padding: 14px 18px;
@@ -1309,7 +1319,7 @@
                 <div class="log-container">
                     <div class="log-header">
                         <div class="log-title">
-                            <div class="log-live"></div>
+                            <div class="log-live ws-connecting"></div>
                             orchestrator.log
                         </div>
                         <button class="btn btn-ghost" onclick="clearLogs()" style="padding:6px 12px; font-size:11px;">Effacer</button>
@@ -1322,10 +1332,16 @@
             <div class="page" id="page-screenshots">
                 <div class="page-header">
                     <div class="page-eyebrow">Playwright</div>
-                    <div class="page-title">Screenshots</div>
+                    <h2>📸 Captures Playwright</h2>
                     <div class="page-subtitle">Captures des pages générées automatiquement</div>
+                    <button onclick="loadScreenshots()" class="btn btn-ghost" style="margin-top:8px">↺ Actualiser</button>
                 </div>
-                <div class="screenshot-grid" id="screenshot-grid"></div>
+
+                <div id="screenshots-empty" class="empty-state hidden" style="color:var(--muted);padding:40px;text-align:center;">
+                    Aucune capture disponible — lance un pipeline pour en générer.
+                </div>
+
+                <div id="screenshots-grid" class="screenshot-grid"></div>
             </div>
 
             <!-- ═══════ PAGE: NEW TICKET ═══════ -->
@@ -1447,6 +1463,7 @@
                 grid.innerHTML = tickets.map(t => {
                     const cls = statusMap[t.status] || 'status-todo';
                     const isDone = cls === 'status-done';
+                    const urlPages = `https://OmarNaceur2001.github.io/agentic-sdlc/tickets/${t.key}/`;
                     return `
                 <div class="ticket-card">
                   <div class="ticket-header">
@@ -1457,7 +1474,8 @@
                   <div class="ticket-desc">${t.description || ''}</div>
                   <div class="ticket-footer">
                     ${isDone
-                      ? `<button class="ticket-btn ticket-btn-test" onclick="viewScreenshot('${t.key}')">📸 Screenshot</button>`
+                      ? `<button class="ticket-btn ticket-btn-test" onclick="viewScreenshot('${t.key}')">📸 Screenshot</button>
+                         <a class="ticket-btn ticket-btn-run" href="${urlPages}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none;">🌐 Live</a>`
                       : `<button class="ticket-btn ticket-btn-run" onclick="runTicket('${t.key}')">▶ Run</button>`
                     }
                   </div>
@@ -1490,22 +1508,29 @@
         async function loadScreenshots() {
             try {
                 const r = await fetch('/api/screenshots');
-                const screenshots = await r.json();
-                const grid = document.getElementById('screenshot-grid');
-                if (!screenshots || screenshots.length === 0) {
-                    grid.innerHTML =
-                        '<div style="color:var(--muted);padding:20px;text-align:center;">Aucun screenshot disponible</div>';
+                const data = await r.json();
+                const screenshots = data.screenshots || [];
+                const grid = document.getElementById('screenshots-grid');
+                const empty = document.getElementById('screenshots-empty');
+                if (screenshots.length === 0) {
+                    grid.innerHTML = '';
+                    if (empty) empty.classList.remove('hidden');
                     return;
                 }
+                if (empty) empty.classList.add('hidden');
                 grid.innerHTML = screenshots.map(s => `
-                    <div class="screenshot-card" onclick="openLightbox('/screenshots/${s.filename}')">
+                    <div class="screenshot-card" onclick="openLightbox('${s.url || '/screenshots/' + s.filename}')">
                         <div class="screenshot-preview">
-                            <img src="/screenshots/${s.filename}" alt="${s.ticket_id}" loading="lazy">
+                            <img src="${s.url || '/screenshots/' + s.filename}"
+                                 alt="${s.ticket_id}"
+                                 loading="lazy"
+                                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                            <div style="display:none;align-items:center;justify-content:center;width:100%;height:100%;font-size:40px;">🖼️</div>
                         </div>
                         <div class="screenshot-info">
                             <div class="screenshot-id">${s.ticket_id}</div>
                             <div class="screenshot-title">${s.title || s.ticket_id}</div>
-                            <div class="screenshot-badge">✅ Tests réussis</div>
+                            <div class="screenshot-badge">✅ ${s.size_kb ? s.size_kb + ' Ko' : 'Tests réussis'}</div>
                         </div>
                     </div>
                 `).join('');
@@ -1611,11 +1636,17 @@
             const desc = document.getElementById('new-desc').value.trim();
             if (!title) {
                 showToast('Veuillez saisir un titre', 'error');
+                document.getElementById('new-title').focus();
                 return;
             }
 
+            const btn = document.querySelector('#page-new-ticket .btn-primary');
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = '⏳ Création en cours…';
+
             try {
-                const response = await fetch('/api/create-ticket', {
+                const response = await fetch('/api/tickets/create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ summary: title, description: desc })
@@ -1624,17 +1655,25 @@
 
                 if (data.success) {
                     showToast(`✅ Ticket ${data.key} créé avec succès !`, 'success');
+                    addLog('OK', `✅ Ticket Jira créé : ${data.key} — ${title}`);
+                    if (data.url) addLog('INFO', `🔗 ${data.url}`);
                     document.getElementById('new-title').value = '';
                     document.getElementById('new-desc').value = '';
                     setTimeout(() => showPage('tickets'), 1200);
                     setTimeout(() => loadTicketsFromJira(), 1500);
                 } else {
                     showToast('❌ Erreur Jira : ' + (data.error || 'inconnue'), 'error');
+                    addLog('ERROR', `❌ Création ticket échouée : ${data.error || 'erreur inconnue'}`);
                 }
             } catch (e) {
                 showToast('❌ Erreur réseau : ' + e.message, 'error');
+                addLog('ERROR', `❌ Erreur réseau création ticket : ${e.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
             }
         }
+
 
         // ── SIMULATION DE PROGRESS ──
         function simulatePhase(type) {
@@ -1696,18 +1735,6 @@
             String(output).split('\n').forEach(line => { if (line.trim()) addLog('ERROR', line); });
         }
 
-        async function refreshBackendLogs() {
-            showPage('logs');
-            addLog('INFO', 'Lecture de orchestrator.log...');
-            try {
-                const r = await fetch('/api/logs');
-                if (!r.ok) throw new Error(`HTTP ${r.status}`);
-                const data = await r.json();
-                if (data && data.logs) {
-                    String(data.logs).split('\n').forEach(line => { if (line.trim()) addLog('INFO', line); });
-                } else { addLog('WARN', 'Aucun log reçu depuis le backend.'); }
-            } catch (e) { addLog('ERROR', 'Erreur lecture logs : ' + e.message); }
-        }
 
         async function runPipeline() {
             showPage('logs');
@@ -1736,8 +1763,62 @@
         }
         window.runFullPipeline = runPipeline;
 
-        // ── POLLING ──
-        setInterval(loadTicketsFromJira, 30000);
+        // ── WEBSOCKET LIVE LOGS (Feature 4) ──
+        let ws = null;
+        let wsReconnectDelay = 2000;
+
+        function setWsStatus(status) {
+            const dot = document.querySelector('.log-live');
+            if (!dot) return;
+            dot.classList.remove('ws-connecting', 'ws-connected', 'ws-disconnected');
+            dot.classList.add('ws-' + status);
+        }
+
+        function connectWebSocket() {
+            setWsStatus('connecting');
+            const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${location.host}/ws/logs`);
+
+            ws.onopen = () => {
+                console.log('[WS] Connecté');
+                setWsStatus('connected');
+                wsReconnectDelay = 2000; // reset backoff
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'log') {
+                        addLog(data.level || 'INFO', data.msg || '');
+                        if (data.ticket_update) {
+                            loadTicketsFromJira();
+                            loadScreenshots();
+                        }
+                    } else if (data.type === 'ping') {
+                        ws.send('ping'); // keepalive pong
+                    }
+                } catch (e) {
+                    console.warn('[WS] Message non-JSON :', event.data);
+                }
+            };
+
+            ws.onclose = () => {
+                console.warn('[WS] Déconnecté — reconnexion dans', wsReconnectDelay, 'ms');
+                setWsStatus('disconnected');
+                setTimeout(connectWebSocket, wsReconnectDelay);
+                wsReconnectDelay = Math.min(wsReconnectDelay * 1.5, 30000);
+            };
+
+            ws.onerror = (err) => {
+                console.error('[WS] Erreur :', err);
+                setWsStatus('disconnected');
+                ws.close();
+            };
+        }
+
+        // Start WebSocket + Jira polling fallback
+        connectWebSocket();
+        setInterval(loadTicketsFromJira, 60000);
     </script>
 </body>
 </html>

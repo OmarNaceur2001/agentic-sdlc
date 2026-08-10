@@ -2,23 +2,19 @@
 """
 check_config_consistency.py
 
-Vérifie deux types de cohérence dans le projet Agentic SDLC :
+Verifie deux types de coherence dans le projet Agentic SDLC :
 
 1. Variables d'environnement : compare les os.getenv(...) / os.environ[...]
-   trouvés dans le code Python avec celles définies dans .env.example
-   -> détecte les variables utilisées mais non documentées (bug potentiel,
-      ex: JIRA_TARGET_STATUS)
-   -> détecte les variables documentées mais jamais utilisées (variable
-      morte, ex: JIRA_SOURCE_STATUS / JIRA_PROGRESS_STATUS)
+   trouves dans le code Python avec celles definies dans .env.example
+   -> detecte les variables utilisees mais non documentees (bug potentiel)
+   -> detecte les variables documentees mais jamais utilisees (variable morte)
 
-2. Routes API : compare les fetch('/api/...') trouvés dans les fichiers
-   .html avec les routes @app.get/post/put/delete(...) définies dans le
-   code -> détecte les appels frontend vers des routes backend
-   inexistantes (ex: /api/create-ticket)
+2. Routes API : compare les fetch('/api/...') trouves dans les fichiers
+   .html avec les routes @app.get/post/put/delete(...) definies dans le
+   code -> detecte les appels frontend vers des routes backend inexistantes
 
 Usage :
     python check_config_consistency.py
-À exécuter depuis la racine du projet (là où se trouve .env.example).
 """
 
 import re
@@ -94,14 +90,14 @@ def main():
     orphaned = defined - set(used)
 
     if missing:
-        print("\n❌ Utilisées dans le code, ABSENTES de .env.example :")
+        print("\n[ERR] Utilisees dans le code, ABSENTES de .env.example :")
         for var in sorted(missing):
             print(f"   {var}  <- {', '.join(sorted(used[var]))}")
     else:
-        print("\n✅ Toutes les variables utilisées sont documentées.")
+        print("\n[OK] Toutes les variables utilisees sont documentees.")
 
     if orphaned:
-        print("\n⚠️  Documentées dans .env.example, JAMAIS utilisées dans le code :")
+        print("\n[WARN] Documentees dans .env.example, JAMAIS utilisees dans le code :")
         for var in sorted(orphaned):
             print(f"   {var}")
 
@@ -115,14 +111,14 @@ def main():
     unused_routes = set(backend) - set(frontend)
 
     if dangling:
-        print("\n❌ Appelées depuis le frontend, ABSENTES du backend :")
+        print("\n[ERR] Appelees depuis le frontend, ABSENTES du backend :")
         for route in sorted(dangling):
             print(f"   {route}  <- {', '.join(sorted(frontend[route]))}")
     else:
-        print("\n✅ Toutes les routes appelées existent côté backend.")
+        print("\n[OK] Toutes les routes appelees existent cote backend.")
 
     if unused_routes:
-        print("\nℹ️  Définies côté backend, jamais appelées depuis le frontend :")
+        print("\n[INFO] Definies cote backend, jamais appelees depuis le frontend :")
         for route in sorted(unused_routes):
             print(f"   {route}")
 

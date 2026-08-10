@@ -12,7 +12,6 @@ from collections import defaultdict
 
 ROOT = Path(".").resolve()
 EXCLUDE = {"venv", ".venv", ".git", "__pycache__", ".qodo", ".vscode", "node_modules"}
-# سكريبتات الأدوات تُستثنى — السكريبت لا يحلل نفسه
 TOOL_SCRIPTS = {"audit_project.py", "check_config_consistency.py"}
 PY_FILES = [p for p in ROOT.rglob("*.py")
             if not any(x in p.parts for x in EXCLUDE)
@@ -24,9 +23,9 @@ ERRORS   = []
 WARNINGS = []
 INFO     = []
 
-def E(phase, msg): ERRORS.append(f"[{phase}] ❌ {msg}")
-def W(phase, msg): WARNINGS.append(f"[{phase}] ⚠️  {msg}")
-def I(phase, msg): INFO.append(f"[{phase}] ℹ️  {msg}")
+def E(phase, msg): ERRORS.append(f"[{phase}] [ERR]  {msg}")
+def W(phase, msg): WARNINGS.append(f"[{phase}] [WARN] {msg}")
+def I(phase, msg): INFO.append(f"[{phase}] [INFO] {msg}")
 
 def read(p):
     try: return p.read_text(encoding="utf-8", errors="ignore")
@@ -103,7 +102,11 @@ def check_imports():
                 if pkg_resolved not in declared and pkg not in declared and pkg not in {
                    "__future__","dotenv","pydantic","starlette","anyio",
                    "httpx","certifi","feature_extractor","code_agent",
-                   "testing_agent","jira_agent","orchestrator","dashboard_app"}:
+                   "testing_agent","jira_agent","orchestrator","dashboard_app",
+                   "jira_config","github_config","jira_ticket_creator",
+                   "deployment_agent","websocket_manager","dashboard_app_patch",
+                   "audit_project","check_config_consistency","debug_jira_statuses",
+                   "test_connections"}:
                     W("IMPORTS", f"{f.name} importe '{pkg}' absent de requirements.txt")
 
 # ─────────────────────────────────────────────
@@ -350,23 +353,23 @@ def main():
         after_e = len(ERRORS)  - before_e
         after_w = len(WARNINGS) - before_w
         after_i = len(INFO)    - before_i
-        status = "✅" if after_e == 0 else "❌"
-        print(f"\n{'─'*65}")
+        status = "OK" if after_e == 0 else "FAIL"
+        print(f"\n{'-'*65}")
         print(f" {status} {label}  [{after_e} err | {after_w} warn | {after_i} info]")
-        print(f"{'─'*65}")
-        for m in ERRORS[-after_e:]   if after_e else []:   print(f"  {m}")
-        for m in WARNINGS[-after_w:] if after_w else []:   print(f"  {m}")
-        for m in INFO[-after_i:]     if after_i else []:   print(f"  {m}")
+        print(f"{'-'*65}")
+        for m in ERRORS[-after_e:]   if after_e else []:   print(f"  [ERR]  {m}")
+        for m in WARNINGS[-after_w:] if after_w else []:   print(f"  [WARN] {m}")
+        for m in INFO[-after_i:]     if after_i else []:   print(f"  [INFO] {m}")
 
     print(f"\n{'='*65}")
-    print(f" RÉSUMÉ : {len(ERRORS)} ERREUR(S)  |  {len(WARNINGS)} AVERTISSEMENT(S)  |  {len(INFO)} INFO(S)")
+    print(f" RESUME : {len(ERRORS)} ERREUR(S)  |  {len(WARNINGS)} AVERTISSEMENT(S)  |  {len(INFO)} INFO(S)")
     print(f"{'='*65}")
 
     if ERRORS:
-        print("\n 🔴 ERREURS À CORRIGER EN PRIORITÉ :")
+        print("\n [!!] ERREURS A CORRIGER EN PRIORITE :")
         for m in ERRORS: print(f"   {m}")
     if WARNINGS:
-        print("\n 🟡 AVERTISSEMENTS :")
+        print("\n [!] AVERTISSEMENTS :")
         for m in WARNINGS: print(f"   {m}")
     print()
 
