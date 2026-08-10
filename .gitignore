@@ -28,4 +28,4 @@ temp_*.html
 
 # Fichiers IDE
 .vscode/
-.idea/
+.idea/.kilo/
